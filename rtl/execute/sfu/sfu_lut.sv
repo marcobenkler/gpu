@@ -1,5 +1,5 @@
 /**
-* Decided to use 7 bit lookup, to reduce storage to under
+* Decided to use 7 bit lookup, to reduce storage, 2 cycles has good enough latency
 **/
 module sfu_lut
     import sfu_pkg::*;
