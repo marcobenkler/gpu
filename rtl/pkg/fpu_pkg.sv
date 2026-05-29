@@ -1,0 +1,10 @@
+package fpu_pgk
+    typedef enum logic [2:0] {
+        SFU_RCP, 
+        SFU_SQRT,
+        SFU_LG2,
+        SFU_EX2,
+        SFU_SIN,
+        SFU_COS
+    } fpu_op_t;
+endpackage
