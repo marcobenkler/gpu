@@ -1,4 +1,4 @@
-package fpu_pgk
+package sfu_pkg;
     typedef enum logic [2:0] {
         SFU_RCP, 
         SFU_SQRT,

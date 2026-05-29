@@ -1,10 +1,10 @@
-module fpu_top
-    import fpu_pgk::*;
+module sfu_top
+    import sfu_pkg::*;
 (
     input  logic        clk,
     input  logic        reset_n,
     input  logic [31:0] operand,
-    input  logic [2:0]  funct3,
+    input  sfu_op_t     op,
     input  logic        valid_in,
     output logic        valid_out,
     output logic [31:0] result
