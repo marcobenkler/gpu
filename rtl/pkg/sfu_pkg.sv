@@ -1,7 +1,7 @@
 package sfu_pkg;
     typedef enum logic [2:0] {
         SFU_RCP, 
-        SFU_SQRT,
+        SFU_RSQRT,
         SFU_LG2,
         SFU_EX2,
         SFU_SIN,

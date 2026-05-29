@@ -1,13 +1,13 @@
 from math import sqrt, log2, sin, cos
 
-operations = ['SFU_RCP', 'SFU_SQRT', 'SFU_LG2', 'SFU_EX2', 'SFU_SIN', 'SFU_COS']
+operations = ['SFU_RCP', 'SFU_RSQRT', 'SFU_LG2', 'SFU_EX2', 'SFU_SIN', 'SFU_COS']
 
 for op in operations:
     for i in range(128):
         a = 1.0 + i / 128.0
         match op:
             case 'SFU_RCP':  x0 = int((1/a)   * 2**7)
-            case 'SFU_SQRT': x0 = int(sqrt(a) * 2**7)
+            case 'SFU_SQRT': x0 = int(1/sqrt(a) * 2**7)
             case 'SFU_LG2':  x0 = int(log2(a) * 2**7)
             case 'SFU_EX2':  x0 = int(2**a    * 2**7)
             case 'SFU_SIN':  x0 = int(sin(a)  * 2**7)
