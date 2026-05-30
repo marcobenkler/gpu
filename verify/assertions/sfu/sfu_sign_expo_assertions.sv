@@ -1,18 +1,18 @@
-module sfu_sign_expo_assertions(
+module sfu_sign_expo_assertions
+    import sfu_pkg::*;
+(
     input sfu_op_t     op,
     input logic        sign_in,
     input logic [7:0]  exp_in,
     input logic [22:0] mant_in,
     input logic        sign_out,
     input logic [7:0]  exp_out,
-    input logic        is_nan,
-    input logic        is_inf,
-    input logic        is_zero,
+    input logic [22:0] mant_out,
     input logic        is_normal
 );
 
-    assert #0 ((is_nan + is_inf + is_zero + is_normal) == 1)
-        else $error("Not exactly one flag high nan=%0b inf=%0b zero=%0b normal=%0b");
+    wire is_zero   = (exp_in == 8'h00) && (mant_in == '0);
+    wire is_nan    = (exp_in == 8'hFF) && (mant_in != '0);
 
     assert #0 (op != SFU_RSQRT || sign_out == 1'b0)
         else $error("RSQRT produced negative value");

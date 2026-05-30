@@ -9,7 +9,7 @@ package sfu_pkg;
     } sfu_op_t;
 
     typedef struct packed {
-        sfu_op_t     op,
+        sfu_op_t     op;
         logic [31:0] operand;
         logic        sign_exp;
         logic [7:0]  exp_exp;

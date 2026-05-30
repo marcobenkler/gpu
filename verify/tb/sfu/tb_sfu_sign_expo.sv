@@ -6,6 +6,8 @@ module tb_sfu_sign_expo
     logic [31:0] operand;
     logic        sign_out;
     logic [7:0]  exp_out;
+    logic [22:0] mant_out;
+    logic        is_normal;
 
     sfu_sign_expo u_sfu_sign_expo(
         .op(op),
@@ -13,7 +15,9 @@ module tb_sfu_sign_expo
         .exp_in(operand[30:23]),
         .mant_in(operand[22:0]),
         .sign_out(sign_out),
-        .exp_out(exp_out)
+        .exp_out(exp_out),
+        .mant_out(mant_out),
+        .is_normal(is_normal)
     );
 
     localparam logic [31:0] POS_ZERO    = 32'h0000_0000;
@@ -28,7 +32,7 @@ module tb_sfu_sign_expo
     localparam logic [31:0] LARGEST_F   = 32'h7F7F_FFFF;
     localparam logic [31:0] SMALLEST_DN = 32'h0000_0001;
 
-    localparam test_t TEST[][] = '{
+    localparam test_t TESTS[52] = '{
         // ========== SFU_RCP (1/x) ==========
         '{SFU_RCP, POS_ZERO,    1'b0, 8'hFF},  // +0 → +inf
         '{SFU_RCP, NEG_ZERO,    1'b1, 8'hFF},  // -0 → -inf
@@ -106,14 +110,14 @@ module tb_sfu_sign_expo
         $dumpfile("sim/sfu/tb_sign_expo.fst");
         $dumpvars(0, tb_sfu_sign_expo);
 
-        op = '0;
+        op = sfu_op_t'(0);
         operand = '0;
         #5;
-        for (int o = 0; o < TEST.size(); o++) begin
-            op = sfu_op_t'(TESTS[i].op);
-            operand = TESTS[i].operand;
+        for (int o = 0; o < 52; o++) begin
+            op = sfu_op_t'(TESTS[o].op);
+            operand = TESTS[o].operand;
             #5;
-            check(op, operand, TESTS[i].sing_exp, TESTS[i].exp_exp);
+            check(op, operand, TESTS[o].sign_exp, TESTS[o].exp_exp);
         end
 
         $display("DONE");
