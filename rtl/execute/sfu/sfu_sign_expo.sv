@@ -11,6 +11,8 @@ module sfu_sign_expo
     output logic        is_normal
 );
 
+    logic [8:0] exp_result;
+
     always_comb begin
         is_normal = 1'b0;
         sign_out = 'x;
@@ -36,11 +38,26 @@ module sfu_sign_expo
                     exp_out  = 8'hFF;
                     mant_out = 23'h0;
                 end
+                //denormal
+                else if (exp_in == 8'h0) begin
+                    sign_out = 0;
+                    exp_out  = 8'hFF;
+                    mant_out = 23'h0; 
+                end
                 // normal
                 else begin
                     sign_out  = sign_in;
-                    exp_out   = 253 - exp_in;
-                    is_normal = 1'b1;
+                    if (mant_in == 23'h0) exp_result = 9'd254 - {1'b0, exp_in};
+                    else exp_result = 9'd253 - {1'b0, exp_in};
+                    //underflow
+                    if (exp_result[8] || exp_result == 9'b0) begin
+                        exp_out  = 8'h0;
+                        mant_out = 23'h0;
+                    end
+                    else begin
+                        exp_out = exp_result[7:0];
+                        is_normal = 1'b1;
+                    end
                 end
             end
             default: ;

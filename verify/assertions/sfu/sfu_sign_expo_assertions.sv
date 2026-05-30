@@ -28,7 +28,7 @@ module sfu_sign_expo_assertions
 
     assert #0 (op != SFU_RCP || !is_normal ||
            ((exp_in <= 8'd127 || exp_out < 8'd127) &&
-            (exp_in >= 8'd127 || exp_out > 8'd127)))
+            (exp_in >= 8'd127 || exp_out >= 8'd127)))
     else $error("RCP exp wrong direction: exp_in=%0d exp_out=%0d", exp_in, exp_out);
 
 endmodule
