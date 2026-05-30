@@ -16,19 +16,17 @@ module tb_sfu_sign_expo
         .exp_out(exp_out)
     );
 
-    localparam logic [31:0] SPECIAL_CASES[] = '{
-        32'h0000_0000,  // +0
-        32'h8000_0000,  // -0
-        32'h7F80_0000,  // +inf
-        32'hFF80_0000,  // -inf
-        32'h7FC0_0000,  // quiet NaN
-        32'h7F80_0001,  // signaling NaN
-        32'h3F80_0000,  // +1.0
-        32'hBF80_0000,  // -1.0
-        32'h0080_0000,  // smallest normal
-        32'h7F7F_FFFF,  // largest finite
-        32'h0000_0001   // smallest denorm
-    };
+    localparam logic [31:0] POS_ZERO    = 32'h0000_0000;
+    localparam logic [31:0] NEG_ZERO    = 32'h8000_0000;
+    localparam logic [31:0] POS_INF     = 32'h7F80_0000;
+    localparam logic [31:0] NEG_INF     = 32'hFF80_0000;
+    localparam logic [31:0] QNAN        = 32'h7FC0_0000;
+    localparam logic [31:0] SNAN        = 32'h7F80_0001;
+    localparam logic [31:0] POS_ONE     = 32'h3F80_0000;
+    localparam logic [31:0] NEG_ONE     = 32'hBF80_0000;
+    localparam logic [31:0] SMALLEST_N  = 32'h0080_0000;
+    localparam logic [31:0] LARGEST_F   = 32'h7F7F_FFFF;
+    localparam logic [31:0] SMALLEST_DN = 32'h0000_0001;
 
     localparam test_t TEST[][] = '{
         // ========== SFU_RCP (1/x) ==========
@@ -98,28 +96,28 @@ module tb_sfu_sign_expo
 
     task check(input sfu_op_t op, input logic [31:0] in,
                input logic sign_exp, input logic [7:0] exp_exp);
-        if (sign_out != sign_exp)
+        if (sign_out !== sign_exp)
             $error("%s sign: got=%0b exp=%0b in=%0b", op.name(), sign_out, sign_exp, in[31]);
-        if (exp_out != exp_exp)
+        if (exp_out !== exp_exp)
             $error("%s exp: got=%0b exp=%0b in=%0b", op.name(), exp_out, exp_exp, in[30:23]);
    endtask
 
     initial begin
-        $dumpvars("sim/sfu/tb_sign_expo.fst");
+        $dumpfile("sim/sfu/tb_sign_expo.fst");
         $dumpvars(0, tb_sfu_sign_expo);
 
         op = '0;
         operand = '0;
         #5;
         for (int o = 0; o < TEST.size(); o++) begin
-            op = sfu_op_t'(o);
-            for (int t = 0; t < TEST[o].size(); t++)begin
-                operand = SPECIAL_CASES[t];
-                #5;
-                check(op, operand, TEST[o][t].sign_exp, TEST[o][t].exp_exp);
-            end
+            op = sfu_op_t'(TESTS[i].op);
+            operand = TESTS[i].operand;
+            #5;
+            check(op, operand, TESTS[i].sing_exp, TESTS[i].exp_exp);
         end
 
+        $display("DONE");
+        $finish;
 
     end
 
