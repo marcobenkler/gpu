@@ -23,7 +23,17 @@ def extract_parts(bits_in):
     mant = bits_in & 0x7FFFFF
     return f, sign, exp, mant
 
+
+def flush_denorm(bits_in):
+    exp = (bits_in >> 23) & 0xFF
+    mant = bits_in & 0x7FFFFF
+    sign = (bits_in >> 31) & 1
+    if exp == 0 and mant != 0:
+        return sign << 31  # flush zu ±0
+    return bits_in
+
 def golden_rcp(bits_in):
+    bits_in = flush_denorm(bits_in)
     f, sign, exp, mant = extract_parts(bits_in)
 
     if exp == 0xFF and mant != 0:  #NAN
@@ -37,6 +47,7 @@ def golden_rcp(bits_in):
     return floats_to_bits(result)
 
 def golden_rsqrt(bits_in):
+    bits_in = flush_denorm(bits_in)
     f, sign, exp, mant = extract_parts(bits_in)
 
     if exp == 0xFF and mant != 0:
@@ -52,6 +63,7 @@ def golden_rsqrt(bits_in):
     return floats_to_bits(result)
 
 def golden_lg2(bits_in):
+    bits_in = flush_denorm(bits_in)
     f, sign, exp, mant = extract_parts(bits_in)
 
     if exp == 0 and mant == 0:
@@ -69,6 +81,7 @@ def golden_lg2(bits_in):
     return floats_to_bits(result)
 
 def golden_ex2(bits_in):
+    bits_in = flush_denorm(bits_in)
     f, sign, exp, mant = extract_parts(bits_in)
 
     if exp == 0xFF and mant != 0:
@@ -86,6 +99,7 @@ def golden_ex2(bits_in):
     return floats_to_bits(result)
 
 def golden_sin(bits_in):
+    bits_in = flush_denorm(bits_in)
     f, sign, exp, mant = extract_parts(bits_in)
 
     if exp == 0xFF:
@@ -97,6 +111,7 @@ def golden_sin(bits_in):
     return floats_to_bits(result)
 
 def golden_cos(bits_in):
+    bits_in = flush_denorm(bits_in)
     f, sign, exp, mant = extract_parts(bits_in)
 
     if exp == 0xFF:
