@@ -32,17 +32,11 @@ module sfu_sign_expo
                     exp_out   = 8'h0;
                     mant_out  = 23'h0;
                 end
-                //pm 0
-                else if (exp_in == 8'h0 && mant_in == 23'h0) begin
+                //pm 0 (denorm is flushed to 0)
+                else if (exp_in == 8'h0) begin
                     sign_out = sign_in;
                     exp_out  = 8'hFF;
                     mant_out = 23'h0;
-                end
-                //denormal
-                else if (exp_in == 8'h0) begin
-                    sign_out = 0;
-                    exp_out  = 8'hFF;
-                    mant_out = 23'h0; 
                 end
                 // normal
                 else begin
@@ -75,8 +69,8 @@ module sfu_sign_expo
                         mant_out = 23'h7FFFFF;
                     end
                 end
-                //pm 0
-                else if (exp_in == 8'h0 & mant_in == 23'h0) begin
+                //pm 0 (denorm is flushed to 0)
+                else if (exp_in == 8'h0) begin
                     sign_out = sign_in;
                     exp_out = 8'hFF;
                     mant_out = 23'h0;
@@ -87,18 +81,34 @@ module sfu_sign_expo
                     mant_out = 23'h7FFFFF;
                 end
                 else begin
-                    if(exp_in[0]) exp_result = (9'd381 - {1'b0, exp_in}) >> 1;
-                    else          exp_result = (9'd380 - {1'b0, exp_in}) >> 1;
-                    //underflow !! currently not catched gn8
-                    if (exp_result[8] || exp_result == 9'b0) begin
-                        exp_out  = 8'h0;
-                        mant_out = 23'h0;
-                    end
-                    else begin
-                        exp_out = exp_result[7:0];
-                        is_normal = 1'b1;
-                    end
+                    if(exp_in[0]) exp_result = (9'd381 - {1'b0, exp_in}) >> 1; //even
+                    else          exp_result = (9'd380 - {1'b0, exp_in}) >> 1; //uneven
+
+                    exp_out = exp_result[7:0];
+                    is_normal = 1'b1;
                 end
+            end
+            SFU_LG2: begin
+                //pm inf
+                sign_out = 1'b0;
+                if (exp_in == 8'hFF && mant_in == 23'h0) begin
+                    exp_out  = 8'hFF;
+                    //+inf => +inf
+                    if (!sign_in) mant_out = 23'h0;               
+                    //-inf => NaN
+                    else mant_out = 23'h7FFFFF;
+                end
+                //pm 0 (denorm is flushed to 0)
+                else if (exp_in == 8'h0) begin
+                    sign_out = 1'b1;
+                    exp_out  = 8'hFF;
+                    mant_out = 23'h0;
+                end
+                else if ((exp_in == 8'hFF && mant_in != 23'h0) || sign_in == 1'b1) begin
+                    exp_out  = 8'hFF;
+                    mant_out = 23'h7FFFFF;
+                end
+                // Rest of SFU really hard, make later
             end
             default: ;
         endcase

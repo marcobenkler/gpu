@@ -69,7 +69,7 @@ module tb_sfu_sign_expo
         '{SFU_LG2, SNAN,        1'b0, 8'hFF},  // sNaN → NaN
         '{SFU_LG2, POS_ONE,     1'b0, 8'h00},  // log2(1) = +0
         '{SFU_LG2, NEG_ONE,     1'b0, 8'hFF},  // neg normal → NaN
-        '{SFU_LG2, SMALLEST_DN, 1'b0, 8'hFF},  // denorm flush→0 → -inf... oder NaN
+        '{SFU_LG2, SMALLEST_DN, 1'b1, 8'hFF},  // denorm flush→0 → -inf... oder NaN
 
         // ========== SFU_EX2 (2^x) ==========
         '{SFU_EX2, POS_ZERO,    1'b0, 8'h7F},  // 2^0 = 1.0
@@ -105,7 +105,7 @@ module tb_sfu_sign_expo
         if (sign_out !== sign_exp)
             $display("%s sign: got=%0b exp=%0b in=%0b", op.name(), sign_out, sign_exp, in[31]);
         if (exp_out !== exp_exp)
-            $display("%s exp: got=%0b exp=%0b in=%0b", op.name(), exp_out, exp_exp, in[30:23]);
+            $display("%s exp: got=%0b exp=%0b in=%0b isnormal=%0b", op.name(), exp_out, exp_exp, in[30:23], is_normal);
         if (sign_out == sign_exp && exp_out == exp_exp)
             $display("%s successfull", op.name());
    endtask
