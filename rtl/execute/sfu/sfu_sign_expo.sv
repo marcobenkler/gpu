@@ -60,6 +60,46 @@ module sfu_sign_expo
                     end
                 end
             end
+            SFU_RSQRT: begin
+                sign_out = 1'b0; //only overridable by -0 => -inf
+                //pm inf
+                if (exp_in == 8'hFF && mant_in == 23'h0) begin
+                    //+inf => +0
+                    if (!sign_in) begin
+                        exp_out  = 8'h0;
+                        mant_out = 23'h0;
+                    end
+                    //-inf => NaN
+                    else begin
+                        exp_out  = 8'hFF;
+                        mant_out = 23'h7FFFFF;
+                    end
+                end
+                //pm 0
+                else if (exp_in == 8'h0 & mant_in == 23'h0) begin
+                    sign_out = sign_in;
+                    exp_out = 8'hFF;
+                    mant_out = 23'h0;
+                end
+                //NaN
+                else if ((exp_in == 8'hFF && mant_in != 23'h0) || sign_in == 1'b1) begin
+                    exp_out  = 8'hFF;
+                    mant_out = 23'h7FFFFF;
+                end
+                else begin
+                    if(exp_in[0]) exp_result = (9'd381 - {1'b0, exp_in}) >> 1;
+                    else          exp_result = (9'd380 - {1'b0, exp_in}) >> 1;
+                    //underflow !! currently not catched gn8
+                    if (exp_result[8] || exp_result == 9'b0) begin
+                        exp_out  = 8'h0;
+                        mant_out = 23'h0;
+                    end
+                    else begin
+                        exp_out = exp_result[7:0];
+                        is_normal = 1'b1;
+                    end
+                end
+            end
             default: ;
         endcase
     end

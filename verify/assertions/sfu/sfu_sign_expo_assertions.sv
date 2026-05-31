@@ -14,7 +14,7 @@ module sfu_sign_expo_assertions
     wire is_zero   = (exp_in == 8'h00) && (mant_in == '0);
     wire is_nan    = (exp_in == 8'hFF) && (mant_in != '0);
 
-    assert #0 (op != SFU_RSQRT || sign_out == 1'b0)
+    assert #0 (op != SFU_RSQRT || sign_out == 1'b0 || (sign_in && exp_in == 8'd0 && mant_in == 23'd0))
         else $error("RSQRT produced negative value");
 
     assert #0 (op != SFU_EX2 || sign_out == 1'b0)

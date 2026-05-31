@@ -1,2 +1,4 @@
 *.hex
 obj_dir/
+*.fst
+*.vcd
