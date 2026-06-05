@@ -157,7 +157,7 @@ def golden_f2i_s(bits_in):
             return 0x80000000
         else:
             return 0x7FFFFFFF
-    #inf
+    #Zero
     elif (exp == 0x00000000 and mant == 0x00000000):
         return 0x00000000
     else:

@@ -38,6 +38,8 @@ module fpu_unpack
     assign is_zero_a = (exp_a == 8'h0 && mant_a_zero);
     assign is_zero_b = (exp_b == 8'h0 && mant_b_zero);
 
+//FLush to zero still missing
+
     always_comb begin
         spec_vld = 1'b1;
         spec_out = 32'h0;
@@ -161,6 +163,40 @@ module fpu_unpack
                     spec_out = {(sign_a && sign_b), 31'h0};
                 end
                 else spec_vld = 1'b0;
+            end
+            FPU_CVT_F2I_S: begin
+                //NaN
+                if (is_nan_a) spec_out = 32'h0;
+                //Inf
+                else if (is_inf_a) begin
+                    if (sign_a != 0) spec_out = 32'h8000_0000;
+                    else             spec_out = 32'h7FFF_FFF;
+                end
+                //Zero
+                else if (is_zero_a) spec_out = 32'h0;
+                else spec_vld = 1'b0;
+                //Check on over/underflow !!
+            end
+            FPU_CVT_F2I_U: begin
+                //NaN
+                if (is_nan_a) spec_out = 32'h0;
+                //Inf
+                else if (is_inf_a) begin
+                    if (sign_a != 0) spec_out = 32'h0;
+                    else             spec_out = 32'hFFFF_FFFF;
+                end
+                //Zero
+                else if (is_zero_a) spec_out = 32'h0;
+                else spec_vld = 1'b0;
+                //Check on over/underflow !!
+            end
+            FPU_CVT_I2F_S: begin
+                if (operand_a == 32'h0) spec_out = 32'h0;
+                else                    spec_vld = 1'b0;
+            end
+            FPU_CVT_I2F_U: begin
+                if (operand_a == 32'h0) spec_out = 32'h0;
+                else                    spec_vld = 1'b0;
             end
         endcase
     end
