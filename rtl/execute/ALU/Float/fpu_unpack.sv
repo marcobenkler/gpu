@@ -142,6 +142,26 @@ module fpu_unpack
                 else spec_vld = 1'b0;
                 ////WARNING OVERFLOW AND UNDERFLOW CHECK AFTER COMPUTATION
             end
+            FPU_MIN: begin
+                //NaN
+                if      (is_nan_a) spec_out = operand_b;
+                else if (is_nan_b) spec_out = operand_a;
+                //Zero
+                else if (is_zero_a && is_zero_b) begin
+                    spec_out = {(sign_a || sign_b), 31'h0};
+                end
+                else spec_vld = 1'b0;
+            end
+            FPU_MAX: begin
+                //NaN
+                if      (is_nan_a) spec_out = operand_b;
+                else if (is_nan_b) spec_out = operand_a;
+                //Zero
+                else if (is_zero_a && is_zero_b) begin
+                    spec_out = {(sign_a && sign_b), 31'h0};
+                end
+                else spec_vld = 1'b0;
+            end
         endcase
     end
 
