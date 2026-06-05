@@ -14,6 +14,13 @@ module fpu_unpack
     output logic        spec_vld
 );
 
+    logic mant_a_zero;
+    logic mant_b_zero;
+
+    logic is_nan_a, is_nan_b;
+    logic is_inf_a, is_inf_b;
+    logic is_zero_a, is_zero_b;
+
     assign sign_a = operand_a[31];
     assign sign_b = operand_b[31];
     assign exp_a = operand_a[30:23];
@@ -24,17 +31,24 @@ module fpu_unpack
     assign mant_a_zero = (operand_a[22:0] == 23'h0);
     assign mant_b_zero = (operand_b[22:0] == 23'h0);
 
+    assign is_nan_a = (exp_a == 8'hFF && !mant_a_zero);
+    assign is_nan_b = (exp_b == 8'hFF && !mant_b_zero);
+    assign is_inf_a = (exp_a == 8'hFF && mant_a_zero);
+    assign is_inf_b = (exp_b == 8'hFF && mant_b_zero);
+    assign is_zero_a = (exp_a == 8'h0 && mant_a_zero);
+    assign is_zero_b = (exp_b == 8'h0 && mant_b_zero);
+
     always_comb begin
         spec_vld = 1'b1;
         spec_out = 32'h0;
         case (fpu_op)
             FPU_ADD: begin
                 //NaN input
-                if (exp_a == 8'hFF && !mant_a_zero) || (exp_b == 8'hFF && !mant_b_zero) begin
+                if (is_nan_a || is_nan_b) begin
                     spec_out = 32'h7FC0_0000;
                 end
                 //Both inf
-                else if (exp_a == 8'hFF && mant_a_zero) && (exp_b == 8'hFF && mant_b_zero) begin
+                else if (is_inf_a && is_inf_b) begin
                     if (sign_a == sign_b) begin
                         spec_out = {sign_a, 31'h7F80_0000};
                     end
@@ -43,27 +57,66 @@ module fpu_unpack
                     end
                 end
                 //One inf
-                else if (exp_a == 8'hFF && mant_a_zero) || (exp_b == 8'hFF && mant_b_zero) begin
+                else if (is_inf_a || is_inf_b) begin
                     //First is inf
-                    if (exp_a == 8'hFF && mant_a_zero) begin
+                    if (is_inf_a) begin
                         spec_out = {sign_a, 31'h7F80_0000};
                     end
                     //Second is inf
                     else spec_out = {sign_b, 31'h7F80_0000};
                 end
                 //Both zero
-                else if (exp_a == 0 && mant_a-zero) && (exp_b == 0 && mant_b_zero) begin
+                else if (is_zero_a && is_zero_b) begin
                     if (sign_a == sign_b) begin 
                         spec_out = {sign_a, 31'h0};
                     end
                     else spec_out = 32'h0;
                 end
                 //One zero - not neccessary, but speeds up computation, if pipelined in the future
-                else if (exp_a == 0 && mant_a_zero) || (exp_b == 0 && mant_b_zero) begin
-                    if (exp_a == 0 && mant_a_zero) begin
-                        spec_out = operand_a;
+                else if (is_zero_a || is_zero_b) begin
+                    if (is_zero_a) begin
+                        spec_out = operand_b;
                     end
-                    else spec_out = operand_b;
+                    else spec_out = operand_a;
+                end
+                else spec_vld = 1'b0;
+            end
+            FPU_SUB: begin
+                //NaN input
+                if (is_nan_a || is_nan_b) begin
+                    spec_out = 32'h7FC0_0000;
+                end
+                //Both inf
+                else if (is_inf_a && is_inf_b) begin
+                    if (sign_a == sign_b) begin
+                        spec_out = 32'h7FC0_0000;
+                    end
+                    else begin
+                        spec_out = {sign_a, 31'h7F80_0000};
+                    end
+                end
+                //One inf
+                else if (is_inf_a || is_inf_b) begin
+                    //First is inf
+                    if (is_inf_a) begin
+                        spec_out = {sign_a, 31'h7F80_0000};
+                    end
+                    //Second is inf
+                    else spec_out = {~sign_b, 31'h7F80_0000};
+                end
+                //Both zero
+                else if (is_zero_a && is_zero_b) begin
+                    if (sign_a == sign_b) begin 
+                        spec_out = 32'h0;
+                    end
+                    else spec_out = {sign_a, 31'h0};
+                end
+                //One zero - not neccessary, but speeds up computation, if pipelined in the future
+                else if (is_zero_a || is_zero_b) begin
+                    if (is_zero_a) begin
+                        spec_out = {~sign_b, exp_b, mant_b[22:0]};
+                    end
+                    else spec_out = operand_a;
                 end
                 else spec_vld = 1'b0;
             end
