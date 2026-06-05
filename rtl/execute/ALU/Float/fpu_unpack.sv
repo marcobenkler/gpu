@@ -120,6 +120,28 @@ module fpu_unpack
                 end
                 else spec_vld = 1'b0;
             end
+            FPU_MUL: begin
+                //Nan
+                if (is_nan_a || is_nan_b) begin
+                    spec_out = 32'h7FC0_0000;
+                end
+                //Inf
+                else if (is_inf_a || is_inf_b) begin
+                    //One is inf, one is 0
+                    if (is_zero_a || is_zero_b) begin
+                        spec_out = 32'h7FC0_0000;
+                    end
+                    else begin
+                        spec_out = {(sign_a ^ sign_b) ,31'h7F80_0000};
+                    end
+                end
+                //Zero
+                else if (is_zero_a && is_zero_b) begin
+                    spec_out = {(sign_a ^ sign_b) , 31'h0};
+                end
+                else spec_vld = 1'b0;
+                ////WARNING OVERFLOW AND UNDERFLOW CHECK AFTER COMPUTATION
+            end
         endcase
     end
 
