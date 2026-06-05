@@ -1,53 +1,43 @@
-package alu_pkg;
-    typedef enum logic [4:0] {
-        //Integer
-        ALU_ADD,
-        ALU_SUB,
-        ALU_AND,
-        ALU_OR,
-        ALU_XOR,
-        ALU_SLL,
-        ALU_SRL,
-        ALU_SRA,
-        ALU_SLT,
-        ALU_SLTU,
-        //Float arithemtic
-        ALU_FADD,
-        ALU_FSUB,
-        //Compare
-        ALU_FEQ,
-        ALU_FLT,
-        ALU_FLE,
-        //Conversion
-        ALU_FCVTW,
-        ALU_FCVTWU,
-        ALU_FCVTSW,
-        ALU_FCVTSWU,
-        //Float misc
-        ALU_FMVXW,
-        ALU_FMVWX,
-        ALU_FCLASS,
-        ALU_FMIN,
-        ALU_FMAX
-    } alu_op_e;
+package exec_pkg;
+
+    typedef enum logic [3:0] {
+        INT_ADD,
+        INT_SUB,
+        INT_AND,
+        INT_OR,
+        INT_XOR,
+        INT_SLL,
+        INT_SRL,
+        INT_SRA,
+        INT_SLT,
+        INT_SLTU
+    } int_alu_op_e;
+
+    typedef enum logic [3:0] {
+        FPU_ADD,
+        FPU_SUB,
+        FPU_MUL,
+        FPU_MIN,
+        FPU_MAX,
+        FPU_CVT_F2I_S,
+        FPU_CVT_F2I_U,
+        FPU_CVT_I2F_S,
+        FPU_CVT_I2F_U
+    } fpu_op_e;
+
+    typedef enum logic [2:0] {
+        SFU_RCP,
+        SFU_RSQRT,
+        SFU_LOG2,
+        SFU_EX2,
+        SFU_SIN,
+        SFU_COS
+    } sfu_op_t;
 
     typedef enum logic [1:0] {
-        IDLE,
-        RUNNING,
-        DONE
-    } div_state_e;
+        EXEC_INT,
+        EXEC_FPU,
+        EXEC_SFU
+    } exec_unit_e;
 
-    typedef enum logic [1:0] {
-        DIV,
-        DIVU,
-        REM,
-        REMU
-    } div_op_e;
-
-    typedef enum logic [1:0] {
-        MUL,
-        MULH,
-        MULHSU,
-        MULHU
-    } mul_op_e;
 endpackage

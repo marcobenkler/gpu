@@ -131,14 +131,33 @@ operations = {
     'cos': golden_cos
 }
 
+SIGN_CASES = [
+    0, 1
+]
+
+EXP_CASES = [0x00, 0x01, 0x3F, 0x40, 0x7E, 0x7F, 0x80, 0xFE, 0xFF]
+
+MANT_CASES = [
+    0x000000,
+    0x000001, 
+    0x000002,
+    0x3FFFFF, 
+    0x400000, 
+    0x7FFFFE, 
+    0x7FFFFF,
+    0x400001,
+    0x3FFFFE, 
+]
+
 def main():
     for op, func in operations.items():
-        with open(f"hex/{op}_golden_model.hex", "w") as f:
-            for exp in range(0, 256):
-                for mant in [0x000000, 0x000001, 0x3FFFFF, 0x7FFFFF]:
-                    bits_in = (exp << 23) | mant
-                    bits_out = func(bits_in)
-                    f.write(f"{bits_in:08X} {bits_out:08X}\n")
+        with open(f"hex/sfu/{op}_golden_model.hex", "w") as f:
+            for exp in EXP_CASES:
+                for mant in MANT_CASES:
+                    for sign in SIGN_CASES:
+                        bits_in = (sign << 31) | (exp << 23) | mant
+                        bits_out = func(bits_in)
+                        f.write(f"{bits_in:08X} {bits_out:08X}\n")
 
 if __name__ == "__main__":
     main()
