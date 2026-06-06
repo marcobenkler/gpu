@@ -51,10 +51,11 @@ module tb_fpu_golden
             @(posedge clk);
             
             if (fpu_result != golden_res[i]) begin
-                $display("[%s] FAIL #%0d: in_a=%08h, in_b=%08h, expected=%08h, got=%08h",
-                         filename, i, golden_in_a[i], golden_in_b[i], golden_res[i], fpu_result);
+                $display("[%s] FAIL #%0d: in_a=%08h, in_b=%08h, expected=%08h, got=%08h rounding.mant_temp=%0b",
+                         filename, i, golden_in_a[i], golden_in_b[i], golden_res[i], fpu_result,
+                         u_fpu_top.u_fpu_rounding.mant_temp);
                 fail_count++;
-                if (fail_count > 30) $finish;
+                //if (fail_count > 30) $finish;
             end
             else pass_count++;
 

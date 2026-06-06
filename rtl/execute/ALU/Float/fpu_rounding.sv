@@ -9,7 +9,7 @@ module fpu_rounding
 );
 
     logic        round_up;
-    logic [23:0] mant_temp;
+    logic [24:0] mant_temp;
     
     //mant_normalized[0] for round to neares even
     assign round_up = flags.g && (flags.r || flags.s || mant_normalized[0]);
@@ -20,7 +20,7 @@ module fpu_rounding
         exp_final  = '0;
         if (round_up) begin
             mant_temp = mant_normalized + 1;
-            if (mant_temp[23]) begin
+            if (mant_temp[24]) begin
                 if (exp_normalized == 8'hFE) begin
                     mant_final = 23'h0;
                     exp_final  = 8'hFF;
