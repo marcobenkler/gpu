@@ -16,6 +16,35 @@ module fpu_top
     logic       cmp_op;
     logic [1:0] cvt_op;
 
+    //unpack
+    logic        sign_a;
+    logic        sign_b;
+    logic [7:0]  exp_a;
+    logic [7:0]  exp_b;
+    logic [23:0] mant_a;
+    logic [23:0] mant_b;
+    logic [31:0] spec_out;
+    logic        spec_vld;
+
+    //shifter
+    logic [7:0]  exp_shifted;
+    logic [23:0] mant_a_shifted;
+    logic [23:0] mant_b_shifted;
+    grs_t        flags_out_shifter;
+
+    //exec
+    logic [24:0] mant_shifted;
+    logic        sign_result;
+    
+    //normalize
+    logic [7:0]  exp_normalized;
+    logic [24:0] mant_normalized;
+    grs_t        flags_out_norm;
+
+    //rouding
+    logic [22:0] mant_final;
+    logic [7:0]  exp_final;
+  
     always_comb begin
         add_op = 0;
         cmp_op = 0;
@@ -34,6 +63,63 @@ module fpu_top
         endcase
     end
 
-    
+    fpu_unpack u_fpu_unpack(
+        .operand_a(operand_a),
+        .operand_b(operand_b),
+        .fpu_op(fpu_op),
+        .sign_a(sing_a),
+        .sign_b(sing_b),
+        .exp_a(exp_a),
+        .exp_b(exp_b),
+        .mant_a(mant_a),
+        .mant_b(mant_b),
+        .spec_out(spec_out),
+        .spec_vld(spec_vld)
+    );
+
+    fpu_shifter u_fpu_shifter(
+        .exp_a(exp_a),
+        .exp_b(exp_b),
+        .mant_a(mant_a),
+        .mant_b(mant_b),
+        .exp_shifted(exp_shifted),
+        .mant_a_shifted(mant_a_shifted),
+        .mant_b_shifted(mant_b_shifted),
+        .flags(flags_out_shifter)
+    );
+
+    fpu_add_sub u_fpu_add_sub(
+        .add_op(add_op),
+        .sign_a(sing_a),
+        .sign_b(sing_b),
+        .mant_a_shifted(mant_a_shifted),
+        .mant_b_shifted(mant_b_shifted),
+        .mant_sum(mant_sum),
+        .sign_result(sign_result)
+    );
+
+    //MUX here when additonal exec fpu modules
+
+    fpu_normalize u_fpu_normalize(
+        .exp_shifted(exp_shifted),
+        .mant_sum(mant_sum),
+        .flags_in(flags_out_shifter),
+        .exp_normalized(exp_normalized),
+        .mant_normalized(mant_normalized),
+        .flags_out(flags_out_norm)
+    );
+
+    fpu_rounding u_fpu_rounding(
+        .mant_normalized(mant_normalized),
+        .exp_normalized(exp_normalized),
+        .flags(flags_out_norm),
+        .mant_final(mant_final),
+        .exp_final(exp_final)
+    );
+
+    always_comb begin
+        if (spec_vld) fpu_result = spec_out;
+        else          fpu_result = {sign_result, exp_final, mant_final};
+    end
 
 endmodule
