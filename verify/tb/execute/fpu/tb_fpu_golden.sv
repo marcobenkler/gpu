@@ -36,22 +36,25 @@ module tb_fpu_golden
             $fatal(1, "Could not open %s", filename);
 
         while (!$feof(fd)) begin
-            if ($fscanf(fd, "%h %h %h", golden_in_a[vec_count], golden_in_b[vec_count], golden_res[vec_count]) == 2)
+            if ($fscanf(fd, "%h %h %h", golden_in_a[vec_count], golden_in_b[vec_count], golden_res[vec_count]) == 3)
                 vec_count++; 
         end
         $fclose(fd);
-        $display("LOADEDD %0d vectors from %s", vec_count, filename);
+        $display("LOADED %0d vectors from %s", vec_count, filename);
 
         for (int i = 0; i < vec_count; i++) begin
             @(posedge clk);
-            operand_a <= golden_in_a[i];
-            operand_b <= golden_in_b[i];
-            fpu_op    <= fpu_op_code;
+            operand_a = golden_in_a[i];
+            operand_b = golden_in_b[i];
+            fpu_op    = fpu_op_code;
+
+            @(posedge clk);
             
-            if (fpu_result != golden_res[vec_count]) begin
+            if (fpu_result != golden_res[i]) begin
                 $display("[%s] FAIL #%0d: in_a=%08h, in_b=%08h, expected=%08h, got=%08h",
                          filename, i, golden_in_a[i], golden_in_b[i], golden_res[i], fpu_result);
                 fail_count++;
+                if (fail_count > 30) $finish;
             end
             else pass_count++;
 

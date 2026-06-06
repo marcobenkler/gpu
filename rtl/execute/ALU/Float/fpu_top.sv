@@ -38,7 +38,7 @@ module fpu_top
     
     //normalize
     logic [7:0]  exp_normalized;
-    logic [24:0] mant_normalized;
+    logic [23:0] mant_normalized;
     grs_t        flags_out_norm;
 
     //rouding

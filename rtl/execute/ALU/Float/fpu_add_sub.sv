@@ -21,10 +21,11 @@ module fpu_add_sub
         else begin
             if (mant_a_shifted >= mant_b_shifted) begin
                 mant_sum = mant_a_shifted - mant_b_shifted;
-                sign_result = sign_a;
+                if (mant_sum == 0) sign_result = 1'b0;
+                else sign_result = sign_a;
             end
             else begin
-                mant_sum = mant_b_shifted - mant_b_shifted;
+                mant_sum = mant_b_shifted - mant_a_shifted;
                 sign_result = sign_b_eff;
             end
         end

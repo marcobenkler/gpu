@@ -14,7 +14,7 @@ module fpu_shifter
     logic [25:0] mant_ext;
     logic [23:0] sticky_mask;
 
-    logic [8:0]  exp_delta;
+    logic [7:0]  exp_delta;
     logic [25:0] mant_shifted;
 
     always_comb begin

@@ -23,10 +23,15 @@ module fpu_unpack
 
     assign sign_a = operand_a[31];
     assign sign_b = operand_b[31];
-    assign exp_a = operand_a[30:23];
-    assign exp_b = operand_b[30:23];
-    assign mant_a = {1'b1, operand_a[22:0]};
-    assign mant_b = {1'b1, operand_b[22:0]};
+    assign exp_a  = operand_a[30:23];
+    assign exp_b  = operand_b[30:23];
+
+    always_comb begin
+        mant_a = {1'b1, operand_a[22:0]};
+        mant_b = {1'b1, operand_b[22:0]};    
+        if (exp_a == 0) mant_a = 24'h0;
+        if (exp_b == 0) mant_b = 24'h0;
+    end
 
     assign mant_a_zero = (operand_a[22:0] == 23'h0);
     assign mant_b_zero = (operand_b[22:0] == 23'h0);
@@ -35,8 +40,8 @@ module fpu_unpack
     assign is_nan_b = (exp_b == 8'hFF && !mant_b_zero);
     assign is_inf_a = (exp_a == 8'hFF && mant_a_zero);
     assign is_inf_b = (exp_b == 8'hFF && mant_b_zero);
-    assign is_zero_a = (exp_a == 8'h0 && mant_a_zero);
-    assign is_zero_b = (exp_b == 8'h0 && mant_b_zero);
+    assign is_zero_a = (exp_a == 8'h0);
+    assign is_zero_b = (exp_b == 8'h0);
 
 //FLush to zero still missing
 
@@ -197,6 +202,10 @@ module fpu_unpack
             FPU_CVT_I2F_U: begin
                 if (operand_a == 32'h0) spec_out = 32'h0;
                 else                    spec_vld = 1'b0;
+            end
+            default: begin
+                spec_out = 32'hFAFAFAFA;
+                spec_vld = 1'b1;
             end
         endcase
     end

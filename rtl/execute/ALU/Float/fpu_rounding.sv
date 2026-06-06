@@ -15,6 +15,9 @@ module fpu_rounding
     assign round_up = flags.g && (flags.r || flags.s || mant_normalized[0]);
     
     always_comb begin
+        mant_temp  = '0;
+        mant_final = '0;
+        exp_final  = '0;
         if (round_up) begin
             mant_temp = mant_normalized + 1;
             if (mant_temp[23]) begin
