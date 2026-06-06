@@ -1,5 +1,5 @@
 module fpu_top
-    import alu_pkg::*;
+    import exec_pkg::*;
 (
     input  logic [31:0] operand_a,
     input  logic [31:0] operand_b,
@@ -33,7 +33,7 @@ module fpu_top
     grs_t        flags_out_shifter;
 
     //exec
-    logic [24:0] mant_shifted;
+    logic [24:0] mant_sum;
     logic        sign_result;
     
     //normalize
@@ -67,8 +67,8 @@ module fpu_top
         .operand_a(operand_a),
         .operand_b(operand_b),
         .fpu_op(fpu_op),
-        .sign_a(sing_a),
-        .sign_b(sing_b),
+        .sign_a(sign_a),
+        .sign_b(sign_b),
         .exp_a(exp_a),
         .exp_b(exp_b),
         .mant_a(mant_a),
@@ -90,8 +90,8 @@ module fpu_top
 
     fpu_add_sub u_fpu_add_sub(
         .add_op(add_op),
-        .sign_a(sing_a),
-        .sign_b(sing_b),
+        .sign_a(sign_a),
+        .sign_b(sign_b),
         .mant_a_shifted(mant_a_shifted),
         .mant_b_shifted(mant_b_shifted),
         .mant_sum(mant_sum),

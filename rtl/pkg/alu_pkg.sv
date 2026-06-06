@@ -41,9 +41,9 @@ package exec_pkg;
     } exec_unit_e;
 
     typedef struct packed {
-        logic g,
-        logic r,
-        logic s
+        logic g;
+        logic r;
+        logic s;
     } grs_t;
 
     function automatic grs_t get_grs(

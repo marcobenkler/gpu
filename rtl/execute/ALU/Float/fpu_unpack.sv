@@ -1,5 +1,5 @@
 module fpu_unpack
-    import alu_pkg::*;
+    import exec_pkg::*;
 (
     input  logic [31:0] operand_a,
     input  logic [31:0] operand_b,

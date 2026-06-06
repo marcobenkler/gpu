@@ -1,5 +1,5 @@
 module fpu_shifter
-    import alu_pkg::*;
+    import exec_pkg::*;
 (
     input  logic [7:0]  exp_a,
     input  logic [7:0]  exp_b,
@@ -13,6 +13,9 @@ module fpu_shifter
 
     logic [25:0] mant_ext;
     logic [23:0] sticky_mask;
+
+    logic [8:0]  exp_delta;
+    logic [25:0] mant_shifted;
 
     always_comb begin
         if (exp_a >= exp_b) begin

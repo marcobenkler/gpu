@@ -8,7 +8,17 @@ FILES_sfu_sign_expo := \
 	verify/assertions/sfu/sfu_sign_expo_assertions.sv \
 	verify/bind/sfu/sfu_sign_expo_bind.sv 
 
+FILES_fpu_golden := \
+	rtl/execute/ALU/Float/fpu_add_sub.sv \
+	rtl/execute/ALU/Float/fpu_normalize.sv \
+	rtl/execute/ALU/Float/fpu_rounding.sv \
+	rtl/execute/ALU/Float/fpu_shifter.sv \
+	rtl/execute/ALU/Float/fpu_top.sv \
+	rtl/execute/ALU/Float/fpu_unpack.sv \
+
 FILES_tb_sfu_sign_expo := verify/tb/sfu/tb_sfu_sign_expo.sv 
+
+FILES_tb_fpu_golden := verify/tb/execute/fpu/tb_fpu_golden.sv
 
 .PHONY: sim
 

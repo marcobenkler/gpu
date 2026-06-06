@@ -1,5 +1,5 @@
 module fpu_add_sub
-    import alu_pkg::*;
+    import exec_pkg::*;
 (
     input  logic        add_op,
     input  logic        sign_a,

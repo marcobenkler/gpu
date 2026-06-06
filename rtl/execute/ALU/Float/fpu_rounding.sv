@@ -1,5 +1,5 @@
 module fpu_rounding
-    import alu_pkg::*;
+    import exec_pkg::*;
 (
     input  logic [23:0] mant_normalized,
     input  logic [7:0]  exp_normalized,

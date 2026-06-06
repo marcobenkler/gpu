@@ -1,5 +1,5 @@
 module fpu_normalize
-import alu_pkg::*;
+import exec_pkg::*;
 (
     input  logic [7:0]  exp_shifted,
     input  logic [24:0] mant_sum,
@@ -8,6 +8,8 @@ import alu_pkg::*;
     output logic [24:0] mant_normalized,
     output grs_t        flags_out
 );
+
+    logic [4:0] lead_zero;
 
     always_comb begin
         //Case 1 overflow on mant
@@ -23,7 +25,7 @@ import alu_pkg::*;
         // Hardwire all on 0 temporary => ~0.1% hab 1 ULP error
         else if (!mant_sum[23]) begin
             lead_zero = lzd24(mant_sum[23:0]);
-            if (lzd >= exp_shifted) begin
+            if (lead_zero >= exp_shifted) begin
                 mant_normalized = 24'h0;
                 exp_normalized  = 8'h0;
             end
