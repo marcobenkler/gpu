@@ -40,4 +40,29 @@ package exec_pkg;
         EXEC_SFU
     } exec_unit_e;
 
+    typedef struct packed {
+        logic g,
+        logic r,
+        logic s
+    } grs_t;
+
+    function automatic grs_t get_grs(
+        input logic [7:0]  exp_delta,
+        input logic [23:0] mant,
+        input logic [25:0] mant_shifted
+    );
+        grs_t result;
+        logic [23:0] sticky_mask;
+
+        sticky_mask = (exp_delta <= 2)  ? '0 : 
+                      (exp_delta >= 26) ? 24'hFF_FFFF :
+                      (24'hFF_FFFF >> (26 - exp_delta));
+        result.g = mant_shifted[1];
+        result.r = mant_shifted[0];
+        result.s = |(mant & sticky_mask);
+
+        return result;
+
+    endfunction
+
 endpackage
