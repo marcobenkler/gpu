@@ -1,4 +1,4 @@
-import struct
+import struct, random
 
 def floats_to_bits(f):
     if f == float('inf'):
@@ -70,7 +70,8 @@ def golden_add(bits_in_1, bits_in_2):
             return (sign_1 << 31) | (exp_1 << 23) | mant_1
         
     else:
-        return floats_to_bits(f_1 + f_2)
+        result_bits = floats_to_bits(f_1 + f_2)
+        return flush_denorm(result_bits)
     
 def golden_sub(bits_in_1, bits_in_2):
     bits_in_2_neg = bits_in_2 ^ 0x80000000
@@ -242,6 +243,10 @@ def main():
                             bits_in = (sign << 31) | (exp << 23) | mant
                             bits_out = func(bits_in)
                             f.write(f"{bits_in:08X} {bits_out:08X}\n")
+                for _ in range(10_000):
+                    b = random.randint(0, 0xFFFFFFFF)
+                    out = func(b)
+                    f.write(f"{b:08X} {out:08X}\n")
 
         else:  # binary ops
             with open(f"hex/fpu/{op}_golden_model.hex", "w") as f:
@@ -254,6 +259,12 @@ def main():
                                     b2 = (s2 << 31) | (exp2 << 23) | mant2
                                     out = func(b1, b2)
                                     f.write(f"{b1:08X} {b2:08X} {out:08X}\n")
+                for _ in range(10_000):
+                    b1 = random.randint(0, 0xFFFFFFFF)
+                    b2 = random.randint(0, 0xFFFFFFFF)
+                    out = func(b1, b2)
+                    f.write(f"{b1:08X} {b2:08X} {out:08X}\n")
+                    
 
 
 
