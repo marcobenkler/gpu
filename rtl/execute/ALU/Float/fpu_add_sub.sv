@@ -29,7 +29,7 @@ module fpu_add_sub
             //Possible edge case, b can be greater, if rounding bits count
             if (mant_a_shifted >= mant_b_shifted) begin
                 // a was shifted => has grs
-                if (!shifted) begin
+                if (shifted) begin
                     mant_sum = mant_a_shifted - mant_b_shifted;
                 end
                 else begin

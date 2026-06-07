@@ -18,7 +18,7 @@ import exec_pkg::*;
         flags_out.s_vec = flags_in.s_vec;
         flags_temp = '0;
         mant_temp = '0;
-        if (mant_sum == 0) begin
+        if (mant_sum == 0 && !flags_in.g && !flags_in.r && !flags_in.s) begin
             mant_normalized = 0;
             exp_normalized  = 0;
             flags_out.g = 0;
@@ -34,8 +34,6 @@ import exec_pkg::*;
             flags_out.s = flags_in.r || flags_in.s;
         end
         //Case 3 undeflow on mant
-        // Problem, I don't have the s flag in bits, OR should be in pack module => Split path later
-        // Hardwire all on 0 temporary => ~0.1% have 1 ULP error
         else if (!mant_sum[23]) begin
             lead_zero = lzd24(mant_sum[23:0]);
             if (8'(lead_zero) >= exp_shifted) begin
