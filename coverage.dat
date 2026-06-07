@@ -245,8 +245,13 @@ C 'frtl/execute/ALU/Float/fpu_add_sub.svl41n39texprpagev_expr/fpu_add_
 C 'frtl/execute/ALU/Float/fpu_add_sub.svl41n39texprpagev_expr/fpu_add_subo(mant_temp[23:0][7]==1) => 1htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 19772
 C 'frtl/execute/ALU/Float/fpu_add_sub.svl41n39texprpagev_expr/fpu_add_subo(mant_temp[23:0][8]==1) => 1htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 19732
 C 'frtl/execute/ALU/Float/fpu_add_sub.svl41n39texprpagev_expr/fpu_add_subo(mant_temp[23:0][9]==1) => 1htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 20232
-C 'frtl/execute/ALU/Float/fpu_add_sub.svl43n17tbranchpagev_branch/fpu_add_suboifS43htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 2516
-C 'frtl/execute/ALU/Float/fpu_add_sub.svl43n18tbranchpagev_branch/fpu_add_suboelseS44htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 70996
+C 'frtl/execute/ALU/Float/fpu_add_sub.svl43n17tbranchpagev_branch/fpu_add_suboifS43htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 2452
+C 'frtl/execute/ALU/Float/fpu_add_sub.svl43n18tbranchpagev_branch/fpu_add_suboelseS44htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 71060
+C 'frtl/execute/ALU/Float/fpu_add_sub.svl43n67texprpagev_expr/fpu_add_subo((mant_sum == 32'sh0)==0) => 0htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 70996
+C 'frtl/execute/ALU/Float/fpu_add_sub.svl43n67texprpagev_expr/fpu_add_subo((mant_sum == 32'sh0)==1 && flags_out[26]==0 && flags_out[25]==0 && flags_out[24]==0) => 1htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 2452
+C 'frtl/execute/ALU/Float/fpu_add_sub.svl43n67texprpagev_expr/fpu_add_subo(flags_out[24]==1) => 0htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 48880
+C 'frtl/execute/ALU/Float/fpu_add_sub.svl43n67texprpagev_expr/fpu_add_subo(flags_out[25]==1) => 0htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 47992
+C 'frtl/execute/ALU/Float/fpu_add_sub.svl43n67texprpagev_expr/fpu_add_subo(flags_out[26]==1) => 0htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 50516
 C 'frtl/execute/ALU/Float/fpu_add_sub.svl47n17tbranchpagev_branch/fpu_add_suboifS47-48htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 4680
 C 'frtl/execute/ALU/Float/fpu_add_sub.svl47n18tbranchpagev_branch/fpu_add_suboelseS50-56htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 66704
 C 'frtl/execute/ALU/Float/fpu_add_sub.svl47n21texprpagev_expr/fpu_add_subo(shifted==0) => 1htb_fpu_golden.u_fpu_top.u_fpu_add_sub' 4680
@@ -3285,8 +3290,8 @@ C 'fverify/tb/execute/fpu/tb_fpu_golden.svl5n18ttogglepagev_toggle/tb_
 C 'fverify/tb/execute/fpu/tb_fpu_golden.svl5n18ttogglepagev_toggle/tb_fpu_goldenooperand_a[8]:1->0htb_fpu_golden' 5445
 C 'fverify/tb/execute/fpu/tb_fpu_golden.svl5n18ttogglepagev_toggle/tb_fpu_goldenooperand_a[9]:0->1htb_fpu_golden' 5494
 C 'fverify/tb/execute/fpu/tb_fpu_golden.svl5n18ttogglepagev_toggle/tb_fpu_goldenooperand_a[9]:1->0htb_fpu_golden' 5493
-C 'fverify/tb/execute/fpu/tb_fpu_golden.svl53n13tbranchpagev_branch/tb_fpu_goldenoifS53-57htb_fpu_golden' 6
-C 'fverify/tb/execute/fpu/tb_fpu_golden.svl53n14tbranchpagev_branch/tb_fpu_goldenoelseS60htb_fpu_golden' 72482
+C 'fverify/tb/execute/fpu/tb_fpu_golden.svl53n13tbranchpagev_branch/tb_fpu_goldenoifS53-57htb_fpu_golden' 0
+C 'fverify/tb/execute/fpu/tb_fpu_golden.svl53n14tbranchpagev_branch/tb_fpu_goldenoelseS60htb_fpu_golden' 72488
 C 'fverify/tb/execute/fpu/tb_fpu_golden.svl6n18ttogglepagev_toggle/tb_fpu_goldenooperand_b[0]:0->1htb_fpu_golden' 9352
 C 'fverify/tb/execute/fpu/tb_fpu_golden.svl6n18ttogglepagev_toggle/tb_fpu_goldenooperand_b[0]:1->0htb_fpu_golden' 9351
 C 'fverify/tb/execute/fpu/tb_fpu_golden.svl6n18ttogglepagev_toggle/tb_fpu_goldenooperand_b[10]:0->1htb_fpu_golden' 9326

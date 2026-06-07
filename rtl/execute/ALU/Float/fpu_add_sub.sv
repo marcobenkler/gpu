@@ -40,7 +40,7 @@ module fpu_add_sub
                     flags_out.s_vec = mant_temp[23:0];
                     flags_out.s     = |mant_temp[23:0];
                 end 
-                if (mant_sum == 0) sign_result = 1'b0;
+                if (mant_sum == 0 && !flags_out.g && !flags_out.r && !flags_out.s) sign_result = 1'b0;
                 else sign_result = sign_a;
             end
             else begin

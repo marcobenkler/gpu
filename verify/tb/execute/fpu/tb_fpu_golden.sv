@@ -53,7 +53,7 @@ module tb_fpu_golden
             if (fpu_result != golden_res[i]) begin
                 $display("[%s] FAIL #%0d: in_a=%08h, in_b=%08h, expected=%08h, got=%08h var=%0h",
                          filename, i, golden_in_a[i], golden_in_b[i], golden_res[i], fpu_result,
-                         u_fpu_top.u_fpu_add_sub.mant_temp);
+                         u_fpu_top.sign_result);
                 fail_count++;
                 //if (fail_count > 30) $finish;
             end
