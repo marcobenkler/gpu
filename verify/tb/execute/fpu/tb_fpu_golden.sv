@@ -55,7 +55,7 @@ module tb_fpu_golden
                          filename, i, golden_in_a[i], golden_in_b[i], golden_res[i], fpu_result,
                          u_fpu_top.u_fpu_add_sub.mant_temp);
                 fail_count++;
-                if (fail_count > 30) $finish;
+                //if (fail_count > 30) $finish;
             end
             else pass_count++;
 

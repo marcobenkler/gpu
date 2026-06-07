@@ -27,11 +27,20 @@ import exec_pkg::*;
         end
         //Case 2 overflow on mant
         else if (mant_sum[24]) begin
-            mant_normalized = mant_sum[24:1];
             exp_normalized = exp_shifted + 1;
-            flags_out.g = mant_sum[0];
-            flags_out.r = flags_in.g;
-            flags_out.s = flags_in.r || flags_in.s;
+            //Check on inf
+            if (exp_normalized == 8'hFF) begin
+                mant_normalized = 24'h0;
+                flags_out.g = 0;
+                flags_out.r = 0;
+                flags_out.s = 0;
+            end
+            else begin 
+                mant_normalized = mant_sum[24:1];
+                flags_out.g = mant_sum[0];
+                flags_out.r = flags_in.g;
+                flags_out.s = flags_in.r || flags_in.s;
+            end
         end
         //Case 3 undeflow on mant
         else if (!mant_sum[23]) begin
