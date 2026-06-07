@@ -34,9 +34,13 @@ module fpu_top
     logic        shifted;
 
     //exec
+    logic [24:0] mant_sum_addsub;
+    logic        sign_result_addsub;
+    grs_t        flags_out_addsub;
+
     logic [24:0] mant_sum;
     logic        sign_result;
-    grs_t        flags_out_adder;
+    grs_t        flags_out_exe;
     
     //normalize
     logic [7:0]  exp_normalized;
@@ -99,17 +103,31 @@ module fpu_top
         .mant_b_shifted(mant_b_shifted),
         .flags_in(flags_out_shifter),
         .shifted(shifted),
-        .mant_sum(mant_sum),
-        .sign_result(sign_result),
-        .flags_out(flags_out_adder)
+        .mant_sum(mant_sum_addsub),
+        .sign_result(sign_result_addsub),
+        .flags_out(flags_out_addsub)
     );
 
     //MUX here when additonal exec fpu modules
+    always_comb begin : exec_type_mux
+        case (fpu_op)
+            FPU_ADD, FPU_SUB: begin
+                mant_sum      = mant_sum_addsub;
+                sign_result   = sign_result_addsub;
+                flags_out_exe = flags_out_addsub;
+            end
+            default: begin
+                mant_sum      = '0;
+                sign_result   = '0;
+                flags_out_exe = '0;
+            end
+        endcase
+    end
 
     fpu_normalize u_fpu_normalize(
         .exp_shifted(exp_shifted),
         .mant_sum(mant_sum),
-        .flags_in(flags_out_adder),
+        .flags_in(flags_out_exe),
         .exp_normalized(exp_normalized),
         .mant_normalized(mant_normalized),
         .flags_out(flags_out_norm)
