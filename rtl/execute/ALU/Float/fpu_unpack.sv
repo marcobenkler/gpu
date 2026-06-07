@@ -155,6 +155,18 @@ module fpu_unpack
                 else if (is_zero_a && is_zero_b) begin
                     spec_out = {(sign_a || sign_b), 31'h0};
                 end
+                else if (is_inf_a || is_inf_b) begin
+                    if (is_inf_a && is_inf_b) 
+                        spec_out = {(sign_a || sign_b), 31'h7F80_0000};
+                    else if (is_inf_a) begin
+                        if(sign_a) spec_out = 32'hFF80_0000;
+                        else       spec_out = operand_b;
+                    end 
+                    else if (is_inf_b) begin
+                        if(sign_b) spec_out = 32'hFF80_0000;
+                        else       spec_out = operand_a;
+                    end 
+                end
                 else spec_vld = 1'b0;
             end
             FPU_MAX: begin
@@ -164,6 +176,18 @@ module fpu_unpack
                 //Zero
                 else if (is_zero_a && is_zero_b) begin
                     spec_out = {(sign_a && sign_b), 31'h0};
+                end
+                else if (is_inf_a || is_inf_b) begin
+                    if (is_inf_a && is_inf_b) 
+                        spec_out = {(sign_a && sign_b), 31'h7F80_0000};
+                    else if (is_inf_a) begin
+                        if(!sign_a) spec_out = 32'h7F80_0000;
+                        else        spec_out = operand_b;
+                    end 
+                    else if (is_inf_b) begin
+                        if(!sign_b) spec_out = 32'h7F80_0000;
+                        else        spec_out = operand_a;
+                    end 
                 end
                 else spec_vld = 1'b0;
             end

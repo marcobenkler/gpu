@@ -71,6 +71,8 @@ module tb_fpu_golden
 
         load_and_test("hex/fpu/add_golden_model.hex", FPU_ADD);
         load_and_test("hex/fpu/sub_golden_model.hex", FPU_SUB);
+        load_and_test("hex/fpu/min_golden_model.hex", FPU_MIN);
+        load_and_test("hex/fpu/min_golden_model.hex", FPU_MAX);
 
         $display("\n=== PASS: %0d   FAIL: %0d ===\n", pass_count, fail_count);
         $finish;

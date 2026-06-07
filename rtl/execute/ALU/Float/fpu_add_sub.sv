@@ -7,7 +7,7 @@ module fpu_add_sub
     input  logic [23:0] mant_a_shifted,
     input  logic [23:0] mant_b_shifted,
     input  grs_t        flags_in,
-    input  logic        shifted, //0 = a, 1 = b
+    input  logic        shifted, //1 = a, 0 = b
     output logic [24:0] mant_sum,
     output logic        sign_result,
     output grs_t        flags_out

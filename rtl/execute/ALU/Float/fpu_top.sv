@@ -41,6 +41,8 @@ module fpu_top
     logic [24:0] mant_sum;
     logic        sign_result;
     grs_t        flags_out_exe;
+
+    logic        cmp_res;
     
     //normalize
     logic [7:0]  exp_normalized;
@@ -108,7 +110,17 @@ module fpu_top
         .flags_out(flags_out_addsub)
     );
 
-    //MUX here when additonal exec fpu modules
+    fpu_cmp u_fpu_cmp(
+        .cmp_op(cmp_op),
+        .sign_a(sign_a),
+        .sign_b(sign_b),
+        .flags_in(flags_out_shifter),
+        .mant_a_shifted(mant_a_shifted),
+        .mant_b_shifted(mant_b_shifted),
+        .shifted(shifted),
+        .cmp_res(cmp_res)
+    );
+
     always_comb begin : exec_type_mux
         case (fpu_op)
             FPU_ADD, FPU_SUB: begin
@@ -143,7 +155,11 @@ module fpu_top
 
     always_comb begin
         if (spec_vld) fpu_result = spec_out;
-        else          fpu_result = {sign_result, exp_final, mant_final};
+        else if (fpu_op == FPU_MIN || fpu_op == FPU_MAX) begin
+            if(!cmp_res) fpu_result = operand_a;
+            else        fpu_result = operand_b;
+        end
+        else fpu_result = {sign_result, exp_final, mant_final};
     end
 
 endmodule
