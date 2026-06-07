@@ -11,7 +11,9 @@ module fpu_unpack
     output logic [23:0] mant_a,
     output logic [23:0] mant_b,
     output logic [31:0] spec_out,
-    output logic        spec_vld
+    output logic        spec_vld,
+    output logic [31:0] flushed_operand_a,
+    output logic [31:0] flushed_operand_b
 );
 
     logic mant_a_zero;
@@ -32,6 +34,9 @@ module fpu_unpack
         if (exp_a == 0) mant_a = 24'h0;
         if (exp_b == 0) mant_b = 24'h0;
     end
+
+    assign flushed_operand_a = {sign_a, exp_a, mant_a[22:0]}; 
+    assign flushed_operand_b = {sign_b, exp_b, mant_b[22:0]}; 
 
     assign mant_a_zero = (operand_a[22:0] == 23'h0);
     assign mant_b_zero = (operand_b[22:0] == 23'h0);
@@ -80,9 +85,9 @@ module fpu_unpack
                 //One zero - not neccessary, but speeds up computation, if pipelined in the future
                 else if (is_zero_a || is_zero_b) begin
                     if (is_zero_a) begin
-                        spec_out = operand_b;
+                        spec_out = flushed_operand_b;
                     end
-                    else spec_out = operand_a;
+                    else spec_out = flushed_operand_a;
                 end
                 else spec_vld = 1'b0;
             end
@@ -121,7 +126,7 @@ module fpu_unpack
                     if (is_zero_a) begin
                         spec_out = {~sign_b, exp_b, mant_b[22:0]};
                     end
-                    else spec_out = operand_a;
+                    else spec_out = flushed_operand_a;
                 end
                 else spec_vld = 1'b0;
             end
@@ -149,8 +154,9 @@ module fpu_unpack
             end
             FPU_MIN: begin
                 //NaN
-                if      (is_nan_a) spec_out = operand_b;
-                else if (is_nan_b) spec_out = operand_a;
+                if (is_nan_a && is_nan_b)   spec_out = 32'h7FC0_0000;
+                else if (is_nan_a)          spec_out = flushed_operand_b;
+                else if (is_nan_b)          spec_out = flushed_operand_a;
                 //Zero
                 else if (is_zero_a && is_zero_b) begin
                     spec_out = {(sign_a || sign_b), 31'h0};
@@ -160,19 +166,20 @@ module fpu_unpack
                         spec_out = {(sign_a || sign_b), 31'h7F80_0000};
                     else if (is_inf_a) begin
                         if(sign_a) spec_out = 32'hFF80_0000;
-                        else       spec_out = operand_b;
+                        else       spec_out = flushed_operand_b;
                     end 
                     else if (is_inf_b) begin
                         if(sign_b) spec_out = 32'hFF80_0000;
-                        else       spec_out = operand_a;
+                        else       spec_out = flushed_operand_a;
                     end 
                 end
                 else spec_vld = 1'b0;
             end
             FPU_MAX: begin
                 //NaN
-                if      (is_nan_a) spec_out = operand_b;
-                else if (is_nan_b) spec_out = operand_a;
+                if (is_nan_a && is_nan_b)  spec_out = 32'h7FC0_0000;
+                else if (is_nan_a)          spec_out = flushed_operand_b;
+                else if (is_nan_b)          spec_out = flushed_operand_a;
                 //Zero
                 else if (is_zero_a && is_zero_b) begin
                     spec_out = {(sign_a && sign_b), 31'h0};
@@ -182,11 +189,11 @@ module fpu_unpack
                         spec_out = {(sign_a && sign_b), 31'h7F80_0000};
                     else if (is_inf_a) begin
                         if(!sign_a) spec_out = 32'h7F80_0000;
-                        else        spec_out = operand_b;
+                        else        spec_out = flushed_operand_b;
                     end 
                     else if (is_inf_b) begin
                         if(!sign_b) spec_out = 32'h7F80_0000;
-                        else        spec_out = operand_a;
+                        else        spec_out = flushed_operand_a;
                     end 
                 end
                 else spec_vld = 1'b0;
@@ -197,7 +204,7 @@ module fpu_unpack
                 //Inf
                 else if (is_inf_a) begin
                     if (sign_a != 0) spec_out = 32'h8000_0000;
-                    else             spec_out = 32'h7FFF_FFF;
+                    else             spec_out = 32'h7FFF_FFFF;
                 end
                 //Zero
                 else if (is_zero_a) spec_out = 32'h0;
@@ -218,11 +225,11 @@ module fpu_unpack
                 //Check on over/underflow !!
             end
             FPU_CVT_I2F_S: begin
-                if (operand_a == 32'h0) spec_out = 32'h0;
+                if (flushed_operand_a == 32'h0) spec_out = 32'h0;
                 else                    spec_vld = 1'b0;
             end
             FPU_CVT_I2F_U: begin
-                if (operand_a == 32'h0) spec_out = 32'h0;
+                if (flushed_operand_a == 32'h0) spec_out = 32'h0;
                 else                    spec_vld = 1'b0;
             end
             default: begin

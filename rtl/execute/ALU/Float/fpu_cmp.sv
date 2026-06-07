@@ -8,7 +8,7 @@ module fpu_cmp
     input  logic [23:0] mant_a_shifted,
     input  logic [23:0] mant_b_shifted,
     input  logic        shifted, //1 = a, 0 = b
-    output              cmp_res  //1 = a, 0 = b
+    output logic        cmp_res  //1 = a, 0 = b
 );
 
     logic cmp_tmp;

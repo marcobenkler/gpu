@@ -25,6 +25,8 @@ module fpu_top
     logic [23:0] mant_b;
     logic [31:0] spec_out;
     logic        spec_vld;
+    logic [31:0] flushed_operand_a;
+    logic [31:0] flushed_operand_b;
 
     //shifter
     logic [7:0]  exp_shifted;
@@ -52,6 +54,7 @@ module fpu_top
     //rouding
     logic [22:0] mant_final;
     logic [7:0]  exp_final;
+
   
     always_comb begin
         add_op = 0;
@@ -82,7 +85,9 @@ module fpu_top
         .mant_a(mant_a),
         .mant_b(mant_b),
         .spec_out(spec_out),
-        .spec_vld(spec_vld)
+        .spec_vld(spec_vld),
+        .flushed_operand_a(flushed_operand_a),
+        .flushed_operand_b(flushed_operand_b)
     );
 
     fpu_shifter u_fpu_shifter(
@@ -156,8 +161,8 @@ module fpu_top
     always_comb begin
         if (spec_vld) fpu_result = spec_out;
         else if (fpu_op == FPU_MIN || fpu_op == FPU_MAX) begin
-            if(!cmp_res) fpu_result = operand_a;
-            else        fpu_result = operand_b;
+            if(cmp_res) fpu_result = flushed_operand_a;
+            else        fpu_result = flushed_operand_b;
         end
         else fpu_result = {sign_result, exp_final, mant_final};
     end

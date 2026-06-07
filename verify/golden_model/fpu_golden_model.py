@@ -121,6 +121,7 @@ def golden_min(bits_in_1, bits_in_2):
     nan_1 = (exp_1 == 0xFF and mant_1 != 0)
     nan_2 = (exp_2 == 0xFF and mant_2 != 0)
 
+    if nan_1 and nan_2: return 0x7FC00000
     if nan_1: return bits_in_2
     if nan_2: return bits_in_1
 
@@ -138,6 +139,7 @@ def golden_max(bits_in_1, bits_in_2):
     nan_1 = (exp_1 == 0xFF and mant_1 != 0)
     nan_2 = (exp_2 == 0xFF and mant_2 != 0)
 
+    if nan_1 and nan_2: return 0x7FC00000
     if nan_1: return bits_in_2
     if nan_2: return bits_in_1
 
