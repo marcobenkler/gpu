@@ -9,19 +9,31 @@ import exec_pkg::*;
     output grs_t        flags_out
 );
 
-    logic [4:0] lead_zero;
+    logic [4:0]  lead_zero;
+    logic [25:0] flags_temp;
+    logic [49:0] mant_temp;
 
     always_comb begin
         lead_zero = '0;
-        //Case 1 overflow on mant
-        if (mant_sum[24]) begin
+        flags_out.s_vec = flags_in.s_vec;
+        flags_temp = '0;
+        mant_temp = '0;
+        if (mant_sum == 0) begin
+            mant_normalized = 0;
+            exp_normalized  = 0;
+            flags_out.g = 0;
+            flags_out.r = 0;
+            flags_out.s = 0;
+        end
+        //Case 2 overflow on mant
+        else if (mant_sum[24]) begin
             mant_normalized = mant_sum[24:1];
             exp_normalized = exp_shifted + 1;
             flags_out.g = mant_sum[0];
             flags_out.r = flags_in.g;
             flags_out.s = flags_in.r || flags_in.s;
         end
-        //Case 2 undeflow on mant
+        //Case 3 undeflow on mant
         // Problem, I don't have the s flag in bits, OR should be in pack module => Split path later
         // Hardwire all on 0 temporary => ~0.1% have 1 ULP error
         else if (!mant_sum[23]) begin
@@ -29,14 +41,20 @@ import exec_pkg::*;
             if (8'(lead_zero) >= exp_shifted) begin
                 mant_normalized = 24'h0;
                 exp_normalized  = 8'h0;
+                flags_out.g = 0;
+                flags_out.r = 0;
+                flags_out.s = 0;
             end
             else begin
-                mant_normalized = mant_sum[23:0] << lead_zero;
-                exp_normalized = exp_shifted - 8'(lead_zero);
+                flags_temp      = {flags_in.g, flags_in.r, flags_in.s_vec};
+                mant_temp       = {mant_sum[23:0], flags_temp} << lead_zero;
+                mant_normalized = mant_temp[49:26];
+                exp_normalized  = exp_shifted - 8'(lead_zero);
+                flags_out.g = mant_temp[25];
+                flags_out.r = mant_temp[24];
+                flags_out.s = |mant_temp[23:0];
             end 
-            flags_out.g = 0;
-            flags_out.r = 0;
-            flags_out.s = 0;
+            
         end
         else begin
             mant_normalized = mant_sum[23:0];

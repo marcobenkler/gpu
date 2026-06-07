@@ -44,6 +44,7 @@ package exec_pkg;
         logic g;
         logic r;
         logic s;
+        logic [23:0] s_vec;
     } grs_t;
 
     function automatic grs_t get_grs(
@@ -53,13 +54,16 @@ package exec_pkg;
     );
         grs_t result;
         logic [23:0] sticky_mask;
+        logic [23:0] s_vec;
 
         sticky_mask = (exp_delta <= 2)  ? '0 : 
                       (exp_delta >= 26) ? 24'hFF_FFFF :
                       (24'hFF_FFFF >> (26 - exp_delta));
+        s_vec = mant & sticky_mask;
         result.g = mant_shifted[1];
         result.r = mant_shifted[0];
-        result.s = |(mant & sticky_mask);
+        result.s = |s_vec;
+        result.s_vec = s_vec;
 
         return result;
 

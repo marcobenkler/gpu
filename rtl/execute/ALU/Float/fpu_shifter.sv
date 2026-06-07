@@ -8,7 +8,8 @@ module fpu_shifter
     output logic [7:0]  exp_shifted,
     output logic [23:0] mant_a_shifted,
     output logic [23:0] mant_b_shifted,
-    output grs_t        flags
+    output grs_t        flags,
+    output logic        shifted
 );
 
     logic [25:0] mant_ext;
@@ -26,6 +27,7 @@ module fpu_shifter
             mant_b_shifted = mant_shifted[25:2];
             mant_a_shifted = mant_a;
             flags = get_grs(exp_delta, mant_b, mant_shifted);
+            shifted = 0;
         end
         else begin
             exp_delta =      exp_b - exp_a;
@@ -35,6 +37,7 @@ module fpu_shifter
             mant_a_shifted = mant_shifted[25:2];
             mant_b_shifted = mant_b;
             flags = get_grs(exp_delta, mant_a, mant_shifted);
+            shifted = 1;
         end
     end
         

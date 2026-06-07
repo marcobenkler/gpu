@@ -43,8 +43,6 @@ module fpu_unpack
     assign is_zero_a = (exp_a == 8'h0);
     assign is_zero_b = (exp_b == 8'h0);
 
-//FLush to zero still missing
-
     always_comb begin
         spec_vld = 1'b1;
         spec_out = 32'h0;
