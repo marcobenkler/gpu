@@ -52,6 +52,7 @@ module fpu_top
     grs_t        flags_out_mul;
     grs_t        flag_rounding;
     
+    logic [31:0] cvt_res;
     
     //normalize
     logic [7:0]  exp_normalized;
@@ -95,6 +96,14 @@ module fpu_top
         .spec_vld(spec_vld),
         .flushed_operand_a(flushed_operand_a),
         .flushed_operand_b(flushed_operand_b)
+    );
+
+    fpu_cvt u_fpu_cvt(
+        .cvt_op(cvt_op),
+        .sign(sign_a),
+        .exp(exp_a),
+        .mant(mant_a),
+        .result(cvt_res)
     );
 
     fpu_shifter u_fpu_shifter(

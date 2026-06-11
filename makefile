@@ -11,6 +11,7 @@ FILES_sfu_sign_expo := \
 FILES_fpu_golden := \
 	rtl/execute/ALU/Float/fpu_add_sub.sv \
 	rtl/execute/ALU/Float/fpu_cmp.sv \
+	rtl/execute/ALU/Float/fpu_cvt.sv \
 	rtl/execute/ALU/Float/fpu_mul.sv \
 	rtl/execute/ALU/Float/fpu_normalize.sv \
 	rtl/execute/ALU/Float/fpu_rounding.sv \
