@@ -53,7 +53,7 @@ module tb_fpu_golden
             if (fpu_result != golden_res[i]) begin
                 $display("[%s] FAIL #%0d: in_a=%08h, in_b=%08h, expected=%08h, got=%08h var=%0h",
                          filename, i, golden_in_a[i], golden_in_b[i], golden_res[i], fpu_result,
-                         u_fpu_top.u_fpu_cmp.cmp_tmp);
+                         u_fpu_top.exp_normalized);
                 fail_count++;
                 //if (fail_count > 30) $finish;
             end
@@ -73,6 +73,7 @@ module tb_fpu_golden
         load_and_test("hex/fpu/sub_golden_model.hex", FPU_SUB);
         load_and_test("hex/fpu/min_golden_model.hex", FPU_MIN);
         load_and_test("hex/fpu/max_golden_model.hex", FPU_MAX);
+        load_and_test("hex/fpu/mul_golden_model.hex", FPU_MUL);
 
         $display("\n=== PASS: %0d   FAIL: %0d ===\n", pass_count, fail_count);
         $finish;

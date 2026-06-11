@@ -146,7 +146,7 @@ module fpu_unpack
                     end
                 end
                 //Zero
-                else if (is_zero_a && is_zero_b) begin
+                else if (is_zero_a || is_zero_b) begin
                     spec_out = {(sign_a ^ sign_b) , 31'h0};
                 end
                 else spec_vld = 1'b0;

@@ -102,15 +102,11 @@ def golden_mul(bits_in_1, bits_in_2):
     
     else:
         result = f_1  * f_2
-        result_bits = floats_to_bits(result)
-
-        #overflow
-        if result == float('inf') or result == float('-inf'):
-            return ((sign_1 ^ sign_2) << 31) | 0x7F800000
         
-        #underflow
-        result_bits = flush_denorm(result_bits)
-        return result_bits
+        if 0 < abs(result) < 2**-126:
+            return (sign_1 ^ sign_2) << 31
+        
+        return floats_to_bits(result)
 
 def golden_min(bits_in_1, bits_in_2):
     bits_in_1 = flush_denorm(bits_in_1)

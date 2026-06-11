@@ -29,22 +29,29 @@ module fpu_top
     logic [31:0] flushed_operand_b;
 
     //shifter
-    logic [7:0]  exp_shifted;
+    logic [7:0]  exp_addsub;
     logic [23:0] mant_a_shifted;
     logic [23:0] mant_b_shifted;
     grs_t        flags_out_shifter;
     logic        shifted;
 
     //exec
-    logic [24:0] mant_sum_addsub;
+    logic [24:0] mant_addsub;
     logic        sign_result_addsub;
     grs_t        flags_out_addsub;
+    logic [7:0]  exp_add_norm;
+    logic [23:0] mant_add_norm;
 
     logic [24:0] mant_sum;
     logic        sign_result;
-    grs_t        flags_out_exe;
-
     logic        cmp_res;
+
+    logic        sign_res_mul;
+    logic [23:0] mant_mul;
+    logic [7:0]  exp_res_mul;
+    grs_t        flags_out_mul;
+    grs_t        flag_rounding;
+    
     
     //normalize
     logic [7:0]  exp_normalized;
@@ -95,7 +102,7 @@ module fpu_top
         .exp_b(exp_b),
         .mant_a(mant_a),
         .mant_b(mant_b),
-        .exp_shifted(exp_shifted),
+        .exp_shifted(exp_addsub),
         .mant_a_shifted(mant_a_shifted),
         .mant_b_shifted(mant_b_shifted),
         .flags(flags_out_shifter),
@@ -110,9 +117,31 @@ module fpu_top
         .mant_b_shifted(mant_b_shifted),
         .flags_in(flags_out_shifter),
         .shifted(shifted),
-        .mant_sum(mant_sum_addsub),
+        .mant_sum(mant_addsub),
         .sign_result(sign_result_addsub),
         .flags_out(flags_out_addsub)
+    );
+    
+    fpu_normalize u_fpu_normalize(
+        .exp_shifted(exp_addsub),
+        .mant_sum(mant_addsub),
+        .flags_in(flags_out_addsub),
+        .exp_normalized(exp_add_norm),
+        .mant_normalized(mant_add_norm),
+        .flags_out(flags_out_norm)
+    );
+
+    fpu_mul u_fpu_mul(
+        .sign_a(sign_a),
+        .sign_b(sign_b),
+        .exp_a(exp_a),
+        .exp_b(exp_b),
+        .mant_a(mant_a),
+        .mant_b(mant_b),
+        .sign_res(sign_res_mul),
+        .mant_mul(mant_mul),
+        .exp_res(exp_res_mul),
+        .flags_out(flags_out_mul)
     );
 
     fpu_cmp u_fpu_cmp(
@@ -126,34 +155,33 @@ module fpu_top
         .cmp_res(cmp_res)
     );
 
-    always_comb begin : exec_type_mux
+    always_comb begin
         case (fpu_op)
             FPU_ADD, FPU_SUB: begin
-                mant_sum      = mant_sum_addsub;
+                mant_normalized      = mant_add_norm;
                 sign_result   = sign_result_addsub;
-                flags_out_exe = flags_out_addsub;
+                flag_rounding = flags_out_norm;
+                exp_normalized      = exp_add_norm;
+            end
+            FPU_MUL: begin
+                mant_normalized      = mant_mul;
+                sign_result      = sign_res_mul;
+                flag_rounding    = flags_out_mul;
+                exp_normalized      = exp_res_mul;
             end
             default: begin
-                mant_sum      = '0;
+                mant_normalized      = '0;
                 sign_result   = '0;
-                flags_out_exe = '0;
+                flag_rounding = '0;
+                exp_normalized = '0;
             end
         endcase
     end
-
-    fpu_normalize u_fpu_normalize(
-        .exp_shifted(exp_shifted),
-        .mant_sum(mant_sum),
-        .flags_in(flags_out_exe),
-        .exp_normalized(exp_normalized),
-        .mant_normalized(mant_normalized),
-        .flags_out(flags_out_norm)
-    );
-
+    
     fpu_rounding u_fpu_rounding(
         .mant_normalized(mant_normalized),
         .exp_normalized(exp_normalized),
-        .flags(flags_out_norm),
+        .flags(flag_rounding),
         .mant_final(mant_final),
         .exp_final(exp_final)
     );
