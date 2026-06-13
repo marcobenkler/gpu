@@ -87,7 +87,7 @@ module tb_fpu_golden
             if (fpu_result != golden_res[i]) begin
                 $display("[%s] FAIL #%0d: in=%08h, expected=%08h, got=%08h var=%0h",
                          filename, i, golden_in_a[i], golden_res[i], fpu_result,
-                         u_fpu_top.u_fpu_cvt.result);
+                         u_fpu_top.spec_vld);
                 fail_count++;
                 //if (fail_count > 10) $finish;
             end
@@ -103,14 +103,15 @@ module tb_fpu_golden
         pass_count = 0;
         fail_count = 0;
 
-        //load_and_test("hex/fpu/add_golden_model.hex", FPU_ADD);
-        //load_and_test("hex/fpu/sub_golden_model.hex", FPU_SUB);
-        //load_and_test("hex/fpu/min_golden_model.hex", FPU_MIN);
-        //load_and_test("hex/fpu/max_golden_model.hex", FPU_MAX);
-        //load_and_test("hex/fpu/mul_golden_model.hex", FPU_MUL);
-        //load_and_test_one("hex/fpu/cvt_f2i_s_golden_model.hex", FPU_CVT_F2I_S);
-        //load_and_test_one("hex/fpu/cvt_f2i_u_golden_model.hex", FPU_CVT_F2I_U);
+        load_and_test("hex/fpu/add_golden_model.hex", FPU_ADD);
+        load_and_test("hex/fpu/sub_golden_model.hex", FPU_SUB);
+        load_and_test("hex/fpu/min_golden_model.hex", FPU_MIN);
+        load_and_test("hex/fpu/max_golden_model.hex", FPU_MAX);
+        load_and_test("hex/fpu/mul_golden_model.hex", FPU_MUL);
+        load_and_test_one("hex/fpu/cvt_f2i_s_golden_model.hex", FPU_CVT_F2I_S);
+        load_and_test_one("hex/fpu/cvt_f2i_u_golden_model.hex", FPU_CVT_F2I_U);
         load_and_test_one("hex/fpu/cvt_i2f_s_golden_model.hex", FPU_CVT_I2F_S);
+        load_and_test_one("hex/fpu/cvt_i2f_u_golden_model.hex", FPU_CVT_I2F_U);
 
         $display("\n=== PASS: %0d   FAIL: %0d ===\n", pass_count, fail_count);
         $finish;

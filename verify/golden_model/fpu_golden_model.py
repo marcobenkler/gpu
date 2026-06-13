@@ -195,7 +195,9 @@ def golden_i2f_s(bits_in):
     return struct.unpack('>I', struct.pack('>f', float(f)))[0]
 
 def golden_i2f_u(bits_in):
-    return floats_to_bits(bits_in)
+    with gmpy2.context(gmpy2.get_context(), precision=24, round=gmpy2.RoundToZero):
+        f = mpfr(bits_in)
+    return struct.unpack('>I', struct.pack('>f', float(f)))[0]
 
 operations = {
     'add':       golden_add,

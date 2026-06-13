@@ -203,7 +203,7 @@ module fpu_top
             else        fpu_result = flushed_operand_b;
         end
         else if (fpu_op == FPU_CVT_F2I_S || fpu_op == FPU_CVT_F2I_U ||
-                 fpu_op == FPU_CVT_I2F_S || fpu_op == FPU_CVT_F2I_U
+                 fpu_op == FPU_CVT_I2F_S || fpu_op == FPU_CVT_I2F_U
         ) fpu_result = cvt_res;
         else fpu_result = {sign_result, exp_final, mant_final};
     end

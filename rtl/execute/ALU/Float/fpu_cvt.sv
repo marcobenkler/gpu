@@ -19,14 +19,22 @@ module fpu_cvt
     logic [5:0]  shft;
     logic [31:0] shft_tmp;
     logic [7:0]  exp_cvt;
-    logic [22:0]  mant_cvt;
+    logic [22:0] mant_cvt;
     logic        sign_cvt;
 
     assign mant_tmp = {8'h0, mant};
     assign exp_true  = exp - 127;
 
     always_comb begin
-        //Smaller 1
+        res_tmp = '0;
+        op_vec  = '0;
+        shft_amt = '0;
+        shft     = '0;
+        shft_tmp = '0;
+        exp_cvt  = '0;
+        mant_cvt = '0;
+        sign_cvt = '0;
+        mant_shft = '0;
         case (cvt_op) 
             2'b00: begin
                 if (exp_true < 0) mant_shft = '0;
@@ -67,6 +75,22 @@ module fpu_cvt
                     res_tmp = {sign_cvt, exp_cvt, mant_cvt};
                 end
             end
+            2'b11: begin
+                if (op_a == 0) res_tmp = 32'h0;
+                else begin
+                    shft_amt = lzd32_23(op_a);
+                    if (shft_amt[5]) begin
+                        shft_tmp = op_a << shft_amt[4:0];
+                        exp_cvt  = 8'd150 - {3'b0, shft_amt[4:0]}; 
+                    end
+                    else begin
+                        shft_tmp = op_a >> shft_amt[4:0];
+                        exp_cvt  = 8'd150 + {3'b0, shft_amt[4:0]}; 
+                    end
+                    mant_cvt = shft_tmp[22:0];
+                    res_tmp = {1'b0, exp_cvt, mant_cvt};
+                end
+            end
             default: mant_shft = '0;
         endcase
     end
@@ -76,6 +100,7 @@ module fpu_cvt
         2'b00:   result = sign ? ((exp_true > 30) ? 32'h8000_0000 : -mant_shft) : mant_shft;
         2'b01:   result = sign ?  32'h0 : mant_shft;
         2'b10:   result = res_tmp;
+        2'b11:   result = res_tmp;
         default: result = mant_shft;
         endcase
     end
