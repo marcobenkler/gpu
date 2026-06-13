@@ -1,4 +1,6 @@
 import struct, random
+import gmpy2
+from gmpy2 import mpfr
 
 def floats_to_bits(f):
     if f == float('inf'):
@@ -187,8 +189,10 @@ def golden_f2i_u(bits_in):
         return result   
 
 def golden_i2f_s(bits_in):
-    result = struct.unpack('>i', struct.pack('>I', bits_in))[0]
-    return floats_to_bits(float(result))
+    val = struct.unpack('>i', struct.pack('>I', bits_in))[0]
+    with gmpy2.context(gmpy2.get_context(), precision=24, round=gmpy2.RoundToZero):
+        f = mpfr(val)
+    return struct.unpack('>I', struct.pack('>f', float(f)))[0]
 
 def golden_i2f_u(bits_in):
     return floats_to_bits(bits_in)

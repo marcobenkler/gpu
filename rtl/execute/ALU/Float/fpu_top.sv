@@ -103,6 +103,7 @@ module fpu_top
         .sign(sign_a),
         .exp(exp_a),
         .mant(mant_a),
+        .op_a(operand_a),
         .result(cvt_res)
     );
 
@@ -201,6 +202,9 @@ module fpu_top
             if(cmp_res) fpu_result = flushed_operand_a;
             else        fpu_result = flushed_operand_b;
         end
+        else if (fpu_op == FPU_CVT_F2I_S || fpu_op == FPU_CVT_F2I_U ||
+                 fpu_op == FPU_CVT_I2F_S || fpu_op == FPU_CVT_F2I_U
+        ) fpu_result = cvt_res;
         else fpu_result = {sign_result, exp_final, mant_final};
     end
 

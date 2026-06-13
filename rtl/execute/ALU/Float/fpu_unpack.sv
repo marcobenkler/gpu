@@ -225,11 +225,11 @@ module fpu_unpack
                 //Check on over/underflow !!
             end
             FPU_CVT_I2F_S: begin
-                if (flushed_operand_a == 32'h0) spec_out = 32'h0;
+                if (operand_a == 32'h0) spec_out = 32'h0;
                 else                    spec_vld = 1'b0;
             end
             FPU_CVT_I2F_U: begin
-                if (flushed_operand_a == 32'h0) spec_out = 32'h0;
+                if (operand_a == 32'h0) spec_out = 32'h0;
                 else                    spec_vld = 1'b0;
             end
             default: begin
