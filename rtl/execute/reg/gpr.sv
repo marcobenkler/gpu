@@ -18,14 +18,16 @@ module gpr #(
     (* ram_style = "block" *) logic [31:0] reg_mem [0:warp_cnt * lane_cnt * reg_cnt -1];
 
     always_ff @(posedge clk) begin : gpr_reg
-        //READ
         for (int i = 0; i < lane_cnt; i++) begin
-            op_a[i] = reg_mem[id_rs1 + i * reg_cnt + id_warp_id * 4 * 32];
-            op_b[i] = reg_mem[id_rs2 + i * reg_cnt + id_warp_id * 4 * 32];
+            //READ
+            op_a[i][31:0] <= reg_mem[id_rs1 + i * reg_cnt + id_warp_id * lane_cnt * reg_cnt];
+            op_b[i][31:0] <= reg_mem[id_rs2 + i * reg_cnt + id_warp_id * lane_cnt * reg_cnt];
+            
+            //WRITE
+            if (wb_en[i]) begin
+                reg_mem[wb_rd + i * reg_cnt + wb_warp_id * lane_cnt * reg_cnt] <= wb_data[i][31:0];
+            end
         end
-
-        //WRITE
-        
     end
 
 endmodule
