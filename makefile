@@ -9,15 +9,15 @@ FILES_sfu_sign_expo := \
 	verify/bind/sfu/sfu_sign_expo_bind.sv 
 
 FILES_fpu_golden := \
-	rtl/execute/ALU/Float/fpu_add_sub.sv \
-	rtl/execute/ALU/Float/fpu_cmp.sv \
-	rtl/execute/ALU/Float/fpu_cvt.sv \
-	rtl/execute/ALU/Float/fpu_mul.sv \
-	rtl/execute/ALU/Float/fpu_normalize.sv \
-	rtl/execute/ALU/Float/fpu_rounding.sv \
-	rtl/execute/ALU/Float/fpu_shifter.sv \
-	rtl/execute/ALU/Float/fpu_top.sv \
-	rtl/execute/ALU/Float/fpu_unpack.sv \
+	rtl/execute/FU/Float/fpu_add_sub.sv \
+	rtl/execute/FU/Float/fpu_cmp.sv \
+	rtl/execute/FU/Float/fpu_cvt.sv \
+	rtl/execute/FU/Float/fpu_mul.sv \
+	rtl/execute/FU/Float/fpu_normalize.sv \
+	rtl/execute/FU/Float/fpu_rounding.sv \
+	rtl/execute/FU/Float/fpu_shifter.sv \
+	rtl/execute/FU/Float/fpu_top.sv \
+	rtl/execute/FU/Float/fpu_unpack.sv \
 
 FILES_tb_sfu_sign_expo := verify/tb/sfu/tb_sfu_sign_expo.sv 
 

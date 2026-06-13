@@ -25,6 +25,11 @@ package exec_pkg;
         FPU_CVT_I2F_U
     } fpu_op_e;
 
+    typedef enum logic [0:0] {
+        FU_ALU,
+        FU_FPU
+    } fu_sel_e;
+
     typedef enum logic [2:0] {
         SFU_RCP,
         SFU_RSQRT,
