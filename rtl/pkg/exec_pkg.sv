@@ -3,6 +3,10 @@ package exec_pkg;
     typedef enum logic [3:0] {
         INT_ADD,
         INT_SUB,
+        INT_MUL,
+        INT_MULH,
+        INT_MULHSU,
+        INT_MULHU,
         INT_AND,
         INT_OR,
         INT_XOR,
@@ -29,6 +33,29 @@ package exec_pkg;
         FU_ALU,
         FU_FPU
     } fu_sel_e;
+
+    typedef enum logic [0:0] {
+        SRC_REG,
+        SRC_PC
+    } alu_src_a_e;
+
+    typedef enum logic [0:0] {
+        SRC_REG,
+        SRC_IMM
+    } alu_src_b_e;
+
+    typedef enum logic [1:0] {
+        PC_4,
+        PC_IMM,
+        PC_FU
+    } pc_src_e;
+
+    typedef enum logic [1:0] {
+        RES_FU,
+        RES_MEM,
+        RES_IMM,
+        RES_PC4
+    } res_src_a_e;
 
     typedef enum logic [2:0] {
         SFU_RCP,

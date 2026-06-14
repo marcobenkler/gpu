@@ -3,19 +3,14 @@ module fu_top
 (
     input  logic [31:0] operand_a,
     input  logic [31:0] operand_b,
-    input  logic [3:0]  op,
+    input  int_alu_op_e alu_op,
+    input  fpu_op_e     fpu_op,
     input  fu_sel_e     fu_sel,
     output logic [31:0] result
 );
 
     logic [31:0] result_fpu;
     logic [31:0] result_alu;
-
-    int_alu_op_e alu_op;
-    assign alu_op = int_alu_op_e'(op)
-    
-    fpu_op_e fpu_op;
-    assign fpu_op = fpu_op_e'(op)
 
     fpu_top u_fpu_top(
         .operand_a(operand_a),
