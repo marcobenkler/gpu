@@ -6,7 +6,8 @@ module pc
     input  pc_src_e     pc_src,
     input  logic [31:0] imm_res,
     input  logic [31:0] exec_res,
-    output logic [31:0] pc_current
+    output logic [31:0] pc_current,
+    output logic [31:0] pc_default //for JAL
 );
 
     logic [31:0] pc_def;

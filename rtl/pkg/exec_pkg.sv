@@ -55,7 +55,7 @@ package exec_pkg;
         RES_MEM,
         RES_IMM,
         RES_PC4
-    } res_src_a_e;
+    } res_src_e;
 
     typedef enum logic [2:0] {
         SFU_RCP,

@@ -8,8 +8,9 @@ module decoder
     output fu_sel_e     fu_sel,
     output int_alu_op_e alu_op,
     output fpu_op_e     fpu_op,
-    output alu_src_a_e  alu_src_a
-    output alu_src_b_e  alu_src_b
+    output alu_src_a_e  alu_src_a,
+    output alu_src_b_e  alu_src_b,
+    output res_src_e    res_src
 );
 
     logic [4:0] op_code;
@@ -98,7 +99,7 @@ module decoder
                 endcase
             end
             5'b01101: begin //U-Type
-                res_src = 3'b010;
+                res_src = SRC_MEM; //vlt wrong
             end
             5'b00101: begin //U-Type
                 alu_src_a = SRC_PC; // Take PC instead of rs1
