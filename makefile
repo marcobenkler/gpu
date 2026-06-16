@@ -7,6 +7,7 @@ FILES_sfu_sign_expo := \
 	rtl/execute/sfu/sfu_sign_expo.sv \
 	verify/assertions/sfu/sfu_sign_expo_assertions.sv \
 	verify/bind/sfu/sfu_sign_expo_bind.sv 
+FILES_tb_sfu_sign_expo := verify/tb/sfu/tb_sfu_sign_expo.sv 
 
 FILES_fpu_golden := \
 	rtl/execute/FU/Float/fpu_add_sub.sv \
@@ -17,11 +18,11 @@ FILES_fpu_golden := \
 	rtl/execute/FU/Float/fpu_rounding.sv \
 	rtl/execute/FU/Float/fpu_shifter.sv \
 	rtl/execute/FU/Float/fpu_top.sv \
-	rtl/execute/FU/Float/fpu_unpack.sv \
-
-FILES_tb_sfu_sign_expo := verify/tb/sfu/tb_sfu_sign_expo.sv 
-
+	rtl/execute/FU/Float/fpu_unpack.sv
 FILES_tb_fpu_golden := verify/tb/execute/fpu/tb_fpu_golden.sv
+
+FILES_gpu := $(shell find rtl -name "*.sv" ! -name "*_pkg.sv" ! -path "*/sfu/*")
+FILES_tb_gpu := verify/tb/tb_gpu.sv
 
 .PHONY: sim
 

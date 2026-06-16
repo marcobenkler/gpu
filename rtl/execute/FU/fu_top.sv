@@ -1,8 +1,8 @@
 module fu_top
-    import alu_pkg::*;
+    import exec_pkg::*;
 (
-    input  logic [31:0] operand_a,
-    input  logic [31:0] operand_b,
+    input  logic [31:0] op_a,
+    input  logic [31:0] op_b,
     input  int_alu_op_e alu_op,
     input  fpu_op_e     fpu_op,
     input  fu_sel_e     fu_sel,
@@ -13,15 +13,15 @@ module fu_top
     logic [31:0] result_alu;
 
     fpu_top u_fpu_top(
-        .operand_a(operand_a),
-        .operand_b(operand_b),
+        .operand_a(op_a),
+        .operand_b(op_b),
         .fpu_op(fpu_op),
         .fpu_result(result_fpu)
     );
 
-    alu_top u_alu_top(
-        .operand_a(operand_a),
-        .operand_b(operand_b),
+    alu_top_integer u_alu_top(
+        .op_a(op_a),
+        .op_b(op_b),
         .alu_op(alu_op),
         .result(result_alu)
     );

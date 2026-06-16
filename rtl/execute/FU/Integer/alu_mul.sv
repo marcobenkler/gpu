@@ -20,11 +20,11 @@ module alu_mul
 
     always_comb begin
         case (alu_op)
-            MUL: mul_res = multi_ss[31:0];
-            MULH: mul_res = multi_ss[63:32];
-            MULHSU: mul_res = multi_su[63:32];
-            MULHU: mul_res = multi_uu[63:32];
-            default: mul_res = '0;
+            INT_MUL:    mul_res = multi_ss[31:0];
+            INT_MULH:   mul_res = multi_ss[63:32];
+            INT_MULHSU: mul_res = multi_su[63:32];
+            INT_MULHU:  mul_res = multi_uu[63:32];
+            default:    mul_res = '0;
         endcase
     end
 

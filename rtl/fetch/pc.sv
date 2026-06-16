@@ -6,20 +6,13 @@ module pc
     input  pc_src_e     pc_src,
     input  logic [31:0] imm_res,
     input  logic [31:0] exec_res,
-    output logic [31:0] pc_cur,
+    input  logic [31:0] pc_cur,
+    output logic [31:0] pc_nxt,
     output logic [31:0] pc_def //for JAL
 );
 
-    always_ff @(posedge clk) begin : pc_update
-        if (!rst_n)
-            pc_cur <= '0;
-        else begin
-            pc_cur <= pc_nxt;
-        end
-    end
-
+    assign pc_def = pc_cur + 4;
     always_comb begin
-        pc_def = pc_cur + 4;
         case (pc_src)
             PC_4:    pc_nxt = pc_def;
             PC_IMM:  pc_nxt = imm_res;

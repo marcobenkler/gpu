@@ -35,14 +35,14 @@ package exec_pkg;
     } fu_sel_e;
 
     typedef enum logic [0:0] {
-        SRC_REG,
+        SRC_REG_A,
         SRC_PC
-    } alu_src_a_e;
+    } exec_src_a_e;
 
     typedef enum logic [0:0] {
-        SRC_REG,
+        SRC_REG_B,
         SRC_IMM
-    } alu_src_b_e;
+    } exec_src_b_e;
 
     typedef enum logic [1:0] {
         PC_4,

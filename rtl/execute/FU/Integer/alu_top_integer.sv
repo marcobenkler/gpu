@@ -1,8 +1,8 @@
 module alu_top_integer
-    import alu_pkg::*;
+    import exec_pkg::*;
 (
-    input  logic [31:0] a,
-    input  logic [31:0] b,
+    input  logic [31:0] op_a,
+    input  logic [31:0] op_b,
     input  int_alu_op_e alu_op,
     output logic [31:0] result    
 );
@@ -40,11 +40,11 @@ module alu_top_integer
         endcase
     end
     
-    alu_addsub  u_addsub_module(.a(a),  .b(b), .result(addsub_result),  .sub(sub));           //sub / add
-    alu_compare u_compare_module(.a(a), .b(b), .result(compare_result), .cmp_op(cmp_op));     //eq / lt / ltu/ ne
-    alu_shift   u_shift_module(.a(a),   .b(b), .result(shift_result),   .shift_op(shift_op)); //sl / srl / sra      
-    alu_logic   u_logic_module(.a(a),   .b(b), .result(logic_result),   .logic_op(logic_op)); //and / or / xor
-    alu_mul     u_alu_mul(.op_a(a), .op_b(b), .alu_op(alu_op), .mul_res(mul_result));
+    alu_addsub_integer  u_addsub_module(.a(op_a),  .b(op_b), .result(addsub_result),  .sub(sub));           //sub / add
+    alu_compare_integer u_compare_module(.a(op_a), .b(op_b), .result(compare_result), .cmp_op(cmp_op));     //eq / lt / ltu/ ne
+    alu_shift_integer   u_shift_module(.a(op_a),   .b(op_b), .result(shift_result),   .shift_op(shift_op)); //sl / srl / sra      
+    alu_logic_integer   u_logic_module(.a(op_a),   .b(op_b), .result(logic_result),   .logic_op(logic_op)); //and / or / xor
+    alu_mul             u_alu_mul(.op_a(op_a), .op_b(op_b), .alu_op(alu_op), .mul_res(mul_result));
 
     always_comb begin
         unique case (alu_op)
