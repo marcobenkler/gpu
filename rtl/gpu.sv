@@ -10,14 +10,13 @@ module gpu
 
     //EACH STAGES OUTPUT
     //ISSUE
-    logic [1:0]          id_warp_id;
-    logic [lane_cnt-1:0] amsk;
-    logic [31:0]         pc_cur;
+    logic [1:0] warp_id;
+    warp_ctx_t  ctx_in;
+    warp_ctx_t  ctx_out;
 
     //FETCH
     logic [31:0] imm_res;
 
-    logic [31:0] pc_nxt;
     logic [31:0] pc_def;
 
     logic [31:0] instr;
@@ -51,25 +50,25 @@ module gpu
 
 
     //ISSUE
-    assign id_warp_id = 2'b00;
-    assign amsk     = 4'b0000; //tmp hardwired til wsched
+    assign ctx_in.amsk = {lane_cnt{1'b1}};
     
     wctx u_wctx(
         .clk(clk),
         .rst_n(rst_n),
-        .warp_id(id_warp_id),
-        .pc_nxt(pc_nxt),
-        .pc_cur(pc_cur), //output
-        .amsk(amsk)  //output
+        .warp_id(warp_id),
+        .pc_en(issue_fired),
+        .ctx_in(ctx_in),
+        .ctx_out(ctx_out) //output
     );
-/*
-    wsched u_wsched(
 
+    wsched u_wsched(
+        
+        .issue_fired(issue_fired), //output
+        .warp_id(warp_id) //output
     );
-*/
 
     //FETCH
-    assign imm_res = pc_cur + imm;
+    assign imm_res = ctx_out.pc + imm;
 
     pc u_pc(
         .clk(clk),
@@ -77,14 +76,14 @@ module gpu
         .pc_src(pc_src),
         .imm_res(imm_res),
         .exec_res(wb_res[0]), //doesnot matter which, all are the same
-        .pc_cur(pc_cur),
-        .pc_nxt(pc_nxt), //output
+        .pc_cur(ctx_out.pc),
+        .pc_nxt(ctx_in.pc), //output
         .pc_def(pc_def)  //output
     );
 
     instr_mem u_instr_mem(
         .clk(clk),
-        .pc(pc_cur),
+        .pc(ctx_out.pc),
         .instr(instr) //output
     );
 
@@ -109,13 +108,13 @@ module gpu
 
     gpr u_gpr(
         .clk(clk),
-        .id_warp_id(id_warp_id),
+        .id_warp_id(warp_id),
         .id_rs1(instr[19:15]),
         .id_rs2(instr[24:20]),
-        .wb_warp_id(id_warp_id),
+        .wb_warp_id(warp_id),
         .wb_rd(instr[11:7]),
         .wb_res(wb_res),
-        .wb_en({4{reg_wrt}} & amsk),
+        .wb_en({4{reg_wrt}} & ctx_out.amsk),
         .rdata1(rdata1), //output
         .rdata2(rdata2)  //output
     );
@@ -126,7 +125,7 @@ module gpu
             op_sel u_op_sel(
                 .rdata1(rdata1[i]),
                 .rdata2(rdata2[i]),
-                .pc_cur(pc_cur),
+                .pc_cur(ctx_out.pc),
                 .imm(imm),
                 .exec_src_a(exec_src_a),
                 .exec_src_b(exec_src_b),
