@@ -14,4 +14,9 @@ package warp_pkg;
         logic [lane_cnt-1:0] amsk;
     } warp_ctx_t;
 
+    typedef struct packed {
+        warp_state_e         state;
+        [$clog2(warp_cnt):0] age_rank;
+    } wsched_entry_t;
+
 endpackage

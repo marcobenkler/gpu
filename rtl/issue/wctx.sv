@@ -14,7 +14,7 @@ module wctx
 
     assign ctx_out = ctx_tbl[warp_id];
 
-    always_ff @(posedge clk or negedge rst_n) begin
+    always_ff @(posedge clk or negedge rst_n) begin //rst_n prohibits bram inference
         if (!rst_n) begin
             for (int i = 0; i < lane_cnt; i++)begin
                 ctx_out <= '0;

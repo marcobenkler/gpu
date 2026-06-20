@@ -14,6 +14,8 @@ module gpu
     warp_ctx_t  ctx_in;
     warp_ctx_t  ctx_out;
 
+    wsched_entry_t wsched_entry [0:warp_cnt-1];
+
     //FETCH
     logic [31:0] imm_res;
 
@@ -62,10 +64,17 @@ module gpu
     );
 
     wsched u_wsched(
-        
+        .clk(clk),
+        .rst_n(rst_n),
+        .wsched_entry(wsched_entry),
         .issue_fired(issue_fired), //output
         .warp_id(warp_id) //output
     );
+
+    trs_blk u_trs_blk(
+        .
+        .wsched_entry(wsched_entry) //output
+    )
 
     //FETCH
     assign imm_res = ctx_out.pc + imm;
