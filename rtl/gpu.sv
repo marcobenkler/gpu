@@ -14,15 +14,13 @@ module gpu
     warp_ctx_t  ctx_in;
     warp_ctx_t  ctx_out;
 
-    wsched_entry_t wsched_entry [0:warp_cnt-1];
+    wsched_entry_t      wsched_entry [0:warp_cnt-1];
+    logic [reg_cnt-1:0] scoreboard   [0:warp_cnt-1]; //written to in issue cleared in wb
 
     //FETCH
     logic [31:0] imm_res;
-
     logic [31:0] pc_def;
-
     logic [31:0] instr;
-
     logic [31:0] imm;
 
     //DECODE
@@ -71,8 +69,14 @@ module gpu
         .warp_id(warp_id) //output
     );
 
-    trs_blk u_trs_blk(
-        .
+    wstate_ctrl u_wstate_ctrl(
+        .clk(clk),
+        .rst_n(rst_n),
+        .scoreboard(scoreboard),
+        .fetch_warp_id(warp_id),
+        .rs1(instr[19:15])
+        .rs2(instr[24:20]),
+        .stl_mem_warp_id(warp_id),
         .wsched_entry(wsched_entry) //output
     )
 

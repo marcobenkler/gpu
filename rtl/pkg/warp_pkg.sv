@@ -5,6 +5,7 @@ package warp_pkg;
         WARP_STL_SB,  //Waits til rd is written to
         WARP_STL_MEM, //Waits for data to be placed in cached, I only have 1 cycle bram latency
         WARP_BAR,     //Software forces all warps to finish specific pc
+        WARP_FETCHING,//1 cycle latency hiding from pipeline
         WARP_IDLE,    //No data attached yet
         WARP_FINISHED //Warp finished executing
     } warp_state_e;
