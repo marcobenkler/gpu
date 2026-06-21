@@ -1,4 +1,5 @@
 package warp_pkg;
+    import gpu_pkg::*; 
 
     typedef enum logic [2:0] {
         WARP_READY,   //Can be put in pipe
@@ -16,8 +17,8 @@ package warp_pkg;
     } warp_ctx_t;
 
     typedef struct packed {
-        warp_state_e         state;
-        [$clog2(warp_cnt):0] age_rank;
+        warp_state_e               state;
+        logic [$clog2(warp_cnt)-1:0] age_rank;
     } wsched_entry_t;
 
 endpackage

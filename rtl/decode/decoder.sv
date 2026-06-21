@@ -10,7 +10,10 @@ module decoder
     output fpu_op_e     fpu_op,
     output exec_src_a_e exec_src_a,
     output exec_src_b_e exec_src_b,
-    output res_src_e    res_src
+    output res_src_e    res_src,
+    output logic        warp_bar,
+    output logic        pc_init,
+    output logic        wspawn
 );
 
     logic [4:0] op_code;
@@ -24,15 +27,18 @@ module decoder
     assign rs2     = instr[24:20];
 
     always_comb begin : decode_comb
-        alu_op    = INT_ADD;
-        fpu_op    = FPU_ADD;
+        alu_op     = INT_ADD;
+        fpu_op     = FPU_ADD;
         exec_src_a = SRC_REG_A;
         exec_src_b = SRC_REG_B;
-        res_src   = RES_FU;
-        fu_sel    = FU_ALU;
-        pc_src    = PC_4;
-        reg_wrt   = 1'b1;
-        mem_wrt = 1'b0;
+        res_src    = RES_FU;
+        fu_sel     = FU_ALU;
+        pc_src     = PC_4;
+        reg_wrt    = 1'b1;
+        mem_wrt    = 1'b0;
+        warp_bar   = 1'b0;
+        pc_init    = 1'b0;
+        wspawn     = 1'b0;
         case (op_code)
             5'b01100: begin //R-Type
                 case (funct3)
@@ -159,6 +165,22 @@ module decoder
                     default: ;
                 endcase
             end
+            5'b00010: begin //Custom GPU extension
+                case (funct3)
+                    3'b000: begin//WSPAWN
+                        pc_init = 1'b1;
+                        wspawn  = 1'b1;
+                    end
+                    //3'b001: //TMC - set amsk, kill by set all to 0
+                    //3'b010: //SPLIT
+                    //3'b011: //JOIN
+                    3'b100: begin//BAR
+                        warp_bar = 1'b1;
+                        reg_wrt  = 1'b0;
+                    end
+                    default: ;
+                endcase
+            end 
             default: ;
         endcase
     end

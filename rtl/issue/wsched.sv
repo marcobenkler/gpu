@@ -15,12 +15,14 @@ module wsched
     logic [$clog2(warp_cnt)-1:0] best_rank;
 
     always_ff @(posedge clk) begin
-        if (!rst_n)
+        if (!rst_n) begin
             warp_id     <= '0;
-            last_issued <= '0
-        else
+            last_issued <= '0;
+        end
+        else begin
             warp_id     <= pick;
             last_issued <= pick;
+        end
     end
 
     always_comb begin

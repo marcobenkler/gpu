@@ -10,9 +10,13 @@ module gpu
 
     //EACH STAGES OUTPUT
     //ISSUE
-    logic [1:0] warp_id;
-    warp_ctx_t  ctx_in;
-    warp_ctx_t  ctx_out;
+    logic [$clog2(warp_cnt)-1:0] warp_id;
+    warp_ctx_t                   ctx_in;
+    warp_ctx_t                   ctx_tbl [0:warp_cnt-1];
+    logic                        warp_bar;
+    logic                        pc_init;
+    logic                        issue_fired;
+    logic                        wspawn;
 
     wsched_entry_t      wsched_entry [0:warp_cnt-1];
     logic [reg_cnt-1:0] scoreboard   [0:warp_cnt-1]; //written to in issue cleared in wb
@@ -50,15 +54,17 @@ module gpu
 
 
     //ISSUE
-    assign ctx_in.amsk = {lane_cnt{1'b1}};
+    assign ctx_in.amsk       = {lane_cnt{1'b1}};
     
     wctx u_wctx(
         .clk(clk),
         .rst_n(rst_n),
         .warp_id(warp_id),
         .pc_en(issue_fired),
+        .pc_start(rdata2[0]),
+        .pc_init(pc_init),
         .ctx_in(ctx_in),
-        .ctx_out(ctx_out) //output
+        .ctx_tbl(ctx_tbl) //output
     );
 
     wsched u_wsched(
@@ -72,16 +78,21 @@ module gpu
     wstate_ctrl u_wstate_ctrl(
         .clk(clk),
         .rst_n(rst_n),
+        .warp_bar(warp_bar),
         .scoreboard(scoreboard),
         .fetch_warp_id(warp_id),
-        .rs1(instr[19:15])
+        .rs1(instr[19:15]),
         .rs2(instr[24:20]),
-        .stl_mem_warp_id(warp_id),
+        .mem_stl(1'b0),
+        .mem_warp_id(warp_id),
+        .warp_ctx(ctx_tbl),
+        .warp_activate_cnt(rdata1[0]),
+        .wspawn(wspawn),
         .wsched_entry(wsched_entry) //output
-    )
+    );
 
     //FETCH
-    assign imm_res = ctx_out.pc + imm;
+    assign imm_res = ctx_tbl[warp_id].pc + imm;
 
     pc u_pc(
         .clk(clk),
@@ -89,14 +100,14 @@ module gpu
         .pc_src(pc_src),
         .imm_res(imm_res),
         .exec_res(wb_res[0]), //doesnot matter which, all are the same
-        .pc_cur(ctx_out.pc),
+        .pc_cur(ctx_tbl[warp_id].pc),
         .pc_nxt(ctx_in.pc), //output
         .pc_def(pc_def)  //output
     );
 
     instr_mem u_instr_mem(
         .clk(clk),
-        .pc(ctx_out.pc),
+        .pc(ctx_tbl[warp_id].pc),
         .instr(instr) //output
     );
 
@@ -108,15 +119,18 @@ module gpu
     //DECODE
     decoder u_decoder(
         .instr(instr),
-        .reg_wrt(reg_wrt),     //output
-        .mem_wrt(mem_wrt),     //output
-        .pc_src(pc_src),       //output
-        .fu_sel(fu_sel),       //output
-        .alu_op(alu_op),       //output
-        .fpu_op(fpu_op),       //output
+        .reg_wrt(reg_wrt),      //output
+        .mem_wrt(mem_wrt),      //output
+        .pc_src(pc_src),        //output
+        .fu_sel(fu_sel),        //output
+        .alu_op(alu_op),        //output
+        .fpu_op(fpu_op),        //output
         .exec_src_a(exec_src_a),//output
         .exec_src_b(exec_src_b),//output
-        .res_src(res_src)      //output
+        .res_src(res_src),      //output
+        .warp_bar(warp_bar),    //output
+        .pc_init(pc_init),      //output
+        .wspawn(wspawn)         //output
     );
 
     gpr u_gpr(
@@ -127,7 +141,7 @@ module gpu
         .wb_warp_id(warp_id),
         .wb_rd(instr[11:7]),
         .wb_res(wb_res),
-        .wb_en({4{reg_wrt}} & ctx_out.amsk),
+        .wb_en({4{reg_wrt}} & ctx_tbl[warp_id].amsk),
         .rdata1(rdata1), //output
         .rdata2(rdata2)  //output
     );
@@ -138,7 +152,7 @@ module gpu
             op_sel u_op_sel(
                 .rdata1(rdata1[i]),
                 .rdata2(rdata2[i]),
-                .pc_cur(ctx_out.pc),
+                .pc_cur(ctx_tbl[warp_id].pc),
                 .imm(imm),
                 .exec_src_a(exec_src_a),
                 .exec_src_b(exec_src_b),
