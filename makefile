@@ -26,7 +26,11 @@ FILES_tb_gpu := verify/tb/tb_gpu.sv
 
 .PHONY: vsim
 
-cocotb:
+clean_dump:
+	rm -f dump.fst
+	rm -rf sim_build
+
+cocotb: clean_dump
 	$(MAKE) -f $(shell cocotb-config --makefiles)/Makefile.sim \
 		SIM=verilator \
 		TOPLEVEL_LANG=verilog \
@@ -34,7 +38,8 @@ cocotb:
 		TOPLEVEL=gpu \
 		COCOTB_TEST_MODULES=smoke_test \
 		SIM_BUILD=sim_build \
-		EXTRA_ARGS="--trace-fst --trace-structs" \
+		EXTRA_ARGS="--trace-fst --trace-structs --trace-underscore --trace-max-array 512 --trace-max-width 0 " \
+		PLUSARGS="--trace" \
 		PYTHONPATH="$(PWD)/verify/tb"
 
 vsim: 

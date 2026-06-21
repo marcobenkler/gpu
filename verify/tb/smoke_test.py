@@ -1,4 +1,5 @@
 import cocotb
+import struct
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, ClockCycles
 
@@ -8,19 +9,33 @@ REG_CNT  = 32
 
 warp_num = 0
 
+def add(rd, rs1, rs2):
+    rs1 &= 0x1F
+    rs2 &= 0x1F
+    rd  &= 0x1F
+    funct3 = 0x0
+    funct7 = 0x0
+    return (funct7 << 25) | (rs2 << 20) | (rs1 << 15) | (funct3 << 12) | (rd << 7) | 0x33
+
+def addi(rd, rs1, imm):
+    rs1 &= 0x1F
+    rd  &= 0x1F
+    imm &= 0xFFF
+    funct3 = 0x0
+    return (imm << 20) | (rs1 << 15) | (funct3 << 12) | (rd << 7) | 0x13
+
 @cocotb.test()
 async def smoke_test(dut): #dut defined in makefile
-    program = [
-        0x00500093,  # addi x1, x0, 5
-        0x00A00113,  # addi x2, x0, 10
-        0x002081B3,  # add  x3, x1, x2
-        0x40208233,  # sub  x4, x1, x2
-    ]
+    program = []
+
+    program.append(addi(1, 0, 5))
+    program.append(addi(2, 0, 10))
+    program.append(add(3, 1, 2))
 
     for addr, instr in enumerate(program):
         dut.u_instr_mem.instr_mem[addr].value = instr
 
-    cocotb.start_soon(Clock(dut.clk, 10, unit="ns").start())
+    cocotb.start_soon(Clock(dut.clk, 10, unit="ps").start())
 
     dut.rst_n.value = 0
     await ClockCycles(dut.clk, 5)

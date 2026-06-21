@@ -13,7 +13,7 @@ module gpr
     output logic [31:0]                   rdata2 [0:lane_cnt - 1]
 );
 
-    (* ram_style = "block" *) logic [31:0] reg_mem [0:warp_cnt * lane_cnt * reg_cnt -1];
+    logic [31:0] reg_mem [0:warp_cnt * lane_cnt * reg_cnt -1] /* verilator public */;
 
     always_ff @(posedge clk) begin : gpr_reg
         for (int i = 0; i < lane_cnt; i++) begin
