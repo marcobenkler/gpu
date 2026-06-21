@@ -24,9 +24,20 @@ FILES_tb_fpu_golden := verify/tb/execute/fpu/tb_fpu_golden.sv
 FILES_gpu := $(shell find rtl -name "*.sv" ! -name "*_pkg.sv" ! -path "*/sfu/*")
 FILES_tb_gpu := verify/tb/tb_gpu.sv
 
-.PHONY: sim
+.PHONY: vsim
 
-sim: 
+cocotb:
+	$(MAKE) -f $(shell cocotb-config --makefiles)/Makefile.sim \
+		SIM=verilator \
+		TOPLEVEL_LANG=verilog \
+		VERILOG_SOURCES="$(RTL_PKG_FILE) $(FILES_gpu)" \
+		TOPLEVEL=gpu \
+		COCOTB_TEST_MODULES=smoke_test \
+		SIM_BUILD=sim_build \
+		EXTRA_ARGS="--trace-fst --trace-structs" \
+		PYTHONPATH="$(PWD)/verify/tb"
+
+vsim: 
 ifndef TEST
 	$(error Enter test, e.g. make sim TEST=sfu_sign_expo)
 endif

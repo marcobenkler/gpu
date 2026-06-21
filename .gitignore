@@ -2,3 +2,4 @@
 obj_dir/
 *.fst
 *.vcd
+__pycache__

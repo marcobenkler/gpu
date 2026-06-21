@@ -19,7 +19,7 @@ module gpu
     logic                        wspawn;
 
     wsched_entry_t      wsched_entry [0:warp_cnt-1];
-    logic [reg_cnt-1:0] scoreboard   [0:warp_cnt-1]; //written to in issue cleared in wb
+    logic [reg_cnt-1:0] scoreboard   [0:warp_cnt-1]; //written to in fetch cleared in wb
 
     //FETCH
     logic [31:0] imm_res;

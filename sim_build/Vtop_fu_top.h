@@ -1,0 +1,317 @@
+// Verilated -*- C++ -*-
+// DESCRIPTION: Verilator output: Design internal header
+// See Vtop.h for the primary calling header
+
+#ifndef VERILATED_VTOP_FU_TOP_H_
+#define VERILATED_VTOP_FU_TOP_H_  // guard
+
+#include "verilated.h"
+
+
+class Vtop__Syms;
+
+class alignas(VL_CACHE_LINE_BYTES) Vtop_fu_top final {
+  public:
+
+    // DESIGN SPECIFIC STATE
+    // Anonymous structures to workaround compiler member-count bugs
+    struct {
+        CData/*3:0*/ alu_op;
+        CData/*3:0*/ fpu_op;
+        CData/*0:0*/ fu_sel;
+        CData/*3:0*/ u_fpu_top__DOT__fpu_op;
+        CData/*0:0*/ u_fpu_top__DOT__add_op;
+        CData/*0:0*/ u_fpu_top__DOT__cmp_op;
+        CData/*1:0*/ u_fpu_top__DOT__cvt_op;
+        CData/*0:0*/ u_fpu_top__DOT__sign_a;
+        CData/*0:0*/ u_fpu_top__DOT__sign_b;
+        CData/*7:0*/ u_fpu_top__DOT__exp_a;
+        CData/*7:0*/ u_fpu_top__DOT__exp_b;
+        CData/*0:0*/ u_fpu_top__DOT__spec_vld;
+        CData/*7:0*/ u_fpu_top__DOT__exp_addsub;
+        CData/*0:0*/ u_fpu_top__DOT__shifted;
+        CData/*0:0*/ u_fpu_top__DOT__sign_result_addsub;
+        CData/*7:0*/ u_fpu_top__DOT__exp_add_norm;
+        CData/*0:0*/ u_fpu_top__DOT__sign_result;
+        CData/*0:0*/ u_fpu_top__DOT__cmp_res;
+        CData/*0:0*/ u_fpu_top__DOT__sign_res_mul;
+        CData/*7:0*/ u_fpu_top__DOT__exp_res_mul;
+        CData/*7:0*/ u_fpu_top__DOT__exp_normalized;
+        CData/*7:0*/ u_fpu_top__DOT__exp_final;
+        CData/*3:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__fpu_op;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__sign_a;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__sign_b;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__exp_a;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__exp_b;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__spec_vld;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__mant_a_zero;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__mant_b_zero;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__is_nan_a;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__is_nan_b;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__is_inf_a;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__is_inf_b;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__is_zero_a;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__is_zero_b;
+        CData/*1:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__cvt_op;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__sign;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__exp;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__exp_true;
+        CData/*5:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__shft_amt;
+        CData/*5:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__shft;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__exp_cvt;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__sign_cvt;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__exp_a;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__exp_b;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__exp_shifted;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__shifted;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__exp_delta;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__add_op;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__sign_a;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__sign_b;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__shifted;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__sign_result;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__sign_b_eff;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_normalize__DOT__exp_shifted;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_normalize__DOT__exp_normalized;
+        CData/*4:0*/ u_fpu_top__DOT__u_fpu_normalize__DOT__lead_zero;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__sign_a;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__sign_b;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__exp_a;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__exp_b;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__sign_res;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__exp_res;
+    };
+    struct {
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_cmp__DOT__cmp_op;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_cmp__DOT__sign_a;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_cmp__DOT__sign_b;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_cmp__DOT__shifted;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_cmp__DOT__cmp_res;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_cmp__DOT__cmp_tmp;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_rounding__DOT__exp_normalized;
+        CData/*7:0*/ u_fpu_top__DOT__u_fpu_rounding__DOT__exp_final;
+        CData/*0:0*/ u_fpu_top__DOT__u_fpu_rounding__DOT__round_up;
+        CData/*3:0*/ u_alu_top__DOT__alu_op;
+        CData/*0:0*/ u_alu_top__DOT__sub;
+        CData/*1:0*/ u_alu_top__DOT__cmp_op;
+        CData/*1:0*/ u_alu_top__DOT__logic_op;
+        CData/*1:0*/ u_alu_top__DOT__shift_op;
+        CData/*0:0*/ u_alu_top__DOT__u_addsub_module__DOT__sub;
+        CData/*1:0*/ u_alu_top__DOT__u_compare_module__DOT__cmp_op;
+        CData/*1:0*/ u_alu_top__DOT__u_shift_module__DOT__shift_op;
+        CData/*4:0*/ u_alu_top__DOT__u_shift_module__DOT__shift_range;
+        CData/*1:0*/ u_alu_top__DOT__u_logic_module__DOT__logic_op;
+        CData/*3:0*/ u_alu_top__DOT__u_alu_mul__DOT__alu_op;
+        CData/*5:0*/ __Vfunc_lzd32_23__0__Vfuncout;
+        CData/*5:0*/ __Vfunc_lzd32_23__1__Vfuncout;
+        CData/*7:0*/ __Vfunc_get_grs__2__exp_delta;
+        CData/*7:0*/ __Vfunc_get_grs__3__exp_delta;
+        CData/*4:0*/ __Vfunc_lzd24__4__Vfuncout;
+        CData/*5:0*/ __Vfunc_lzd32_23__5__Vfuncout;
+        CData/*5:0*/ __Vfunc_lzd32_23__6__Vfuncout;
+        CData/*7:0*/ __Vfunc_get_grs__7__exp_delta;
+        CData/*7:0*/ __Vfunc_get_grs__8__exp_delta;
+        CData/*4:0*/ __Vfunc_lzd24__9__Vfuncout;
+        CData/*5:0*/ __Vfunc_lzd32_23__10__Vfuncout;
+        CData/*5:0*/ __Vfunc_lzd32_23__11__Vfuncout;
+        CData/*7:0*/ __Vfunc_get_grs__12__exp_delta;
+        CData/*7:0*/ __Vfunc_get_grs__13__exp_delta;
+        CData/*4:0*/ __Vfunc_lzd24__14__Vfuncout;
+        CData/*5:0*/ __Vfunc_lzd32_23__15__Vfuncout;
+        CData/*5:0*/ __Vfunc_lzd32_23__16__Vfuncout;
+        CData/*7:0*/ __Vfunc_get_grs__17__exp_delta;
+        CData/*7:0*/ __Vfunc_get_grs__18__exp_delta;
+        CData/*4:0*/ __Vfunc_lzd24__19__Vfuncout;
+        SData/*9:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__exp_tmp;
+        SData/*9:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__exp_norm;
+        IData/*31:0*/ op_a;
+        IData/*31:0*/ op_b;
+        IData/*31:0*/ result;
+        IData/*31:0*/ result_fpu;
+        IData/*31:0*/ result_alu;
+        IData/*31:0*/ u_fpu_top__DOT__operand_a;
+        IData/*31:0*/ u_fpu_top__DOT__operand_b;
+        IData/*31:0*/ u_fpu_top__DOT__fpu_result;
+        IData/*31:0*/ u_fpu_top__DOT__add_sub_result;
+        IData/*31:0*/ u_fpu_top__DOT__cmp_result;
+        IData/*31:0*/ u_fpu_top__DOT__cvt_result;
+        IData/*31:0*/ u_fpu_top__DOT__mul_result;
+        IData/*23:0*/ u_fpu_top__DOT__mant_a;
+        IData/*23:0*/ u_fpu_top__DOT__mant_b;
+        IData/*31:0*/ u_fpu_top__DOT__spec_out;
+        IData/*31:0*/ u_fpu_top__DOT__flushed_operand_a;
+        IData/*31:0*/ u_fpu_top__DOT__flushed_operand_b;
+        IData/*23:0*/ u_fpu_top__DOT__mant_a_shifted;
+        IData/*23:0*/ u_fpu_top__DOT__mant_b_shifted;
+        IData/*26:0*/ u_fpu_top__DOT__flags_out_shifter;
+        IData/*24:0*/ u_fpu_top__DOT__mant_addsub;
+        IData/*26:0*/ u_fpu_top__DOT__flags_out_addsub;
+    };
+    struct {
+        IData/*23:0*/ u_fpu_top__DOT__mant_add_norm;
+        IData/*24:0*/ u_fpu_top__DOT__mant_sum;
+        IData/*23:0*/ u_fpu_top__DOT__mant_mul;
+        IData/*26:0*/ u_fpu_top__DOT__flags_out_mul;
+        IData/*26:0*/ u_fpu_top__DOT__flag_rounding;
+        IData/*31:0*/ u_fpu_top__DOT__cvt_res;
+        IData/*23:0*/ u_fpu_top__DOT__mant_normalized;
+        IData/*26:0*/ u_fpu_top__DOT__flags_out_norm;
+        IData/*22:0*/ u_fpu_top__DOT__mant_final;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__operand_a;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__operand_b;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__mant_a;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__mant_b;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__spec_out;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__flushed_operand_a;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_unpack__DOT__flushed_operand_b;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__mant;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__op_a;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__result;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__mant_shft;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__mant_tmp;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__res_tmp;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__op_vec;
+        IData/*31:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__shft_tmp;
+        IData/*22:0*/ u_fpu_top__DOT__u_fpu_cvt__DOT__mant_cvt;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__mant_a;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__mant_b;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__mant_a_shifted;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__mant_b_shifted;
+        IData/*26:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__flags;
+        IData/*25:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__mant_ext;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__sticky_mask;
+        IData/*25:0*/ u_fpu_top__DOT__u_fpu_shifter__DOT__mant_shifted;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__mant_a_shifted;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__mant_b_shifted;
+        IData/*26:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__flags_in;
+        IData/*24:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__mant_sum;
+        IData/*26:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__flags_out;
+        IData/*24:0*/ u_fpu_top__DOT__u_fpu_normalize__DOT__mant_sum;
+        IData/*26:0*/ u_fpu_top__DOT__u_fpu_normalize__DOT__flags_in;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_normalize__DOT__mant_normalized;
+        IData/*26:0*/ u_fpu_top__DOT__u_fpu_normalize__DOT__flags_out;
+        IData/*25:0*/ u_fpu_top__DOT__u_fpu_normalize__DOT__flags_temp;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__mant_a;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__mant_b;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__mant_mul;
+        IData/*26:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__flags_out;
+        IData/*26:0*/ u_fpu_top__DOT__u_fpu_cmp__DOT__flags_in;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_cmp__DOT__mant_a_shifted;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_cmp__DOT__mant_b_shifted;
+        IData/*23:0*/ u_fpu_top__DOT__u_fpu_rounding__DOT__mant_normalized;
+        IData/*26:0*/ u_fpu_top__DOT__u_fpu_rounding__DOT__flags;
+        IData/*22:0*/ u_fpu_top__DOT__u_fpu_rounding__DOT__mant_final;
+        IData/*24:0*/ u_fpu_top__DOT__u_fpu_rounding__DOT__mant_temp;
+        IData/*31:0*/ u_alu_top__DOT__op_a;
+        IData/*31:0*/ u_alu_top__DOT__op_b;
+        IData/*31:0*/ u_alu_top__DOT__result;
+        IData/*31:0*/ u_alu_top__DOT__addsub_result;
+        IData/*31:0*/ u_alu_top__DOT__compare_result;
+        IData/*31:0*/ u_alu_top__DOT__shift_result;
+        IData/*31:0*/ u_alu_top__DOT__logic_result;
+        IData/*31:0*/ u_alu_top__DOT__mul_result;
+        IData/*31:0*/ u_alu_top__DOT__u_addsub_module__DOT__a;
+        IData/*31:0*/ u_alu_top__DOT__u_addsub_module__DOT__b;
+    };
+    struct {
+        IData/*31:0*/ u_alu_top__DOT__u_addsub_module__DOT__result;
+        IData/*31:0*/ u_alu_top__DOT__u_addsub_module__DOT__b_buf;
+        IData/*31:0*/ u_alu_top__DOT__u_compare_module__DOT__a;
+        IData/*31:0*/ u_alu_top__DOT__u_compare_module__DOT__b;
+        IData/*31:0*/ u_alu_top__DOT__u_compare_module__DOT__result;
+        IData/*31:0*/ u_alu_top__DOT__u_shift_module__DOT__a;
+        IData/*31:0*/ u_alu_top__DOT__u_shift_module__DOT__b;
+        IData/*31:0*/ u_alu_top__DOT__u_shift_module__DOT__result;
+        IData/*31:0*/ u_alu_top__DOT__u_logic_module__DOT__a;
+        IData/*31:0*/ u_alu_top__DOT__u_logic_module__DOT__b;
+        IData/*31:0*/ u_alu_top__DOT__u_logic_module__DOT__result;
+        IData/*31:0*/ u_alu_top__DOT__u_alu_mul__DOT__op_a;
+        IData/*31:0*/ u_alu_top__DOT__u_alu_mul__DOT__op_b;
+        IData/*31:0*/ u_alu_top__DOT__u_alu_mul__DOT__mul_res;
+        IData/*31:0*/ __Vfunc_lzd32_23__0__val;
+        IData/*31:0*/ __Vfunc_lzd32_23__1__val;
+        IData/*26:0*/ __Vfunc_get_grs__2__Vfuncout;
+        IData/*23:0*/ __Vfunc_get_grs__2__mant;
+        IData/*25:0*/ __Vfunc_get_grs__2__mant_shifted;
+        IData/*26:0*/ __Vfunc_get_grs__2__result;
+        IData/*23:0*/ __Vfunc_get_grs__2__sticky_mask;
+        IData/*23:0*/ __Vfunc_get_grs__2__s_vec;
+        IData/*26:0*/ __Vfunc_get_grs__3__Vfuncout;
+        IData/*23:0*/ __Vfunc_get_grs__3__mant;
+        IData/*25:0*/ __Vfunc_get_grs__3__mant_shifted;
+        IData/*26:0*/ __Vfunc_get_grs__3__result;
+        IData/*23:0*/ __Vfunc_get_grs__3__sticky_mask;
+        IData/*23:0*/ __Vfunc_get_grs__3__s_vec;
+        IData/*23:0*/ __Vfunc_lzd24__4__val;
+        IData/*31:0*/ __Vfunc_lzd32_23__5__val;
+        IData/*31:0*/ __Vfunc_lzd32_23__6__val;
+        IData/*26:0*/ __Vfunc_get_grs__7__Vfuncout;
+        IData/*23:0*/ __Vfunc_get_grs__7__mant;
+        IData/*25:0*/ __Vfunc_get_grs__7__mant_shifted;
+        IData/*26:0*/ __Vfunc_get_grs__7__result;
+        IData/*23:0*/ __Vfunc_get_grs__7__sticky_mask;
+        IData/*23:0*/ __Vfunc_get_grs__7__s_vec;
+        IData/*26:0*/ __Vfunc_get_grs__8__Vfuncout;
+        IData/*23:0*/ __Vfunc_get_grs__8__mant;
+        IData/*25:0*/ __Vfunc_get_grs__8__mant_shifted;
+        IData/*26:0*/ __Vfunc_get_grs__8__result;
+        IData/*23:0*/ __Vfunc_get_grs__8__sticky_mask;
+        IData/*23:0*/ __Vfunc_get_grs__8__s_vec;
+        IData/*23:0*/ __Vfunc_lzd24__9__val;
+        IData/*31:0*/ __Vfunc_lzd32_23__10__val;
+        IData/*31:0*/ __Vfunc_lzd32_23__11__val;
+        IData/*26:0*/ __Vfunc_get_grs__12__Vfuncout;
+        IData/*23:0*/ __Vfunc_get_grs__12__mant;
+        IData/*25:0*/ __Vfunc_get_grs__12__mant_shifted;
+        IData/*26:0*/ __Vfunc_get_grs__12__result;
+        IData/*23:0*/ __Vfunc_get_grs__12__sticky_mask;
+        IData/*23:0*/ __Vfunc_get_grs__12__s_vec;
+        IData/*26:0*/ __Vfunc_get_grs__13__Vfuncout;
+        IData/*23:0*/ __Vfunc_get_grs__13__mant;
+        IData/*25:0*/ __Vfunc_get_grs__13__mant_shifted;
+        IData/*26:0*/ __Vfunc_get_grs__13__result;
+        IData/*23:0*/ __Vfunc_get_grs__13__sticky_mask;
+        IData/*23:0*/ __Vfunc_get_grs__13__s_vec;
+        IData/*23:0*/ __Vfunc_lzd24__14__val;
+        IData/*31:0*/ __Vfunc_lzd32_23__15__val;
+        IData/*31:0*/ __Vfunc_lzd32_23__16__val;
+        IData/*26:0*/ __Vfunc_get_grs__17__Vfuncout;
+        IData/*23:0*/ __Vfunc_get_grs__17__mant;
+        IData/*25:0*/ __Vfunc_get_grs__17__mant_shifted;
+    };
+    struct {
+        IData/*26:0*/ __Vfunc_get_grs__17__result;
+        IData/*23:0*/ __Vfunc_get_grs__17__sticky_mask;
+        IData/*23:0*/ __Vfunc_get_grs__17__s_vec;
+        IData/*26:0*/ __Vfunc_get_grs__18__Vfuncout;
+        IData/*23:0*/ __Vfunc_get_grs__18__mant;
+        IData/*25:0*/ __Vfunc_get_grs__18__mant_shifted;
+        IData/*26:0*/ __Vfunc_get_grs__18__result;
+        IData/*23:0*/ __Vfunc_get_grs__18__sticky_mask;
+        IData/*23:0*/ __Vfunc_get_grs__18__s_vec;
+        IData/*23:0*/ __Vfunc_lzd24__19__val;
+        QData/*49:0*/ u_fpu_top__DOT__u_fpu_add_sub__DOT__mant_temp;
+        QData/*49:0*/ u_fpu_top__DOT__u_fpu_normalize__DOT__mant_temp;
+        QData/*47:0*/ u_fpu_top__DOT__u_fpu_mul__DOT__mant_tmp;
+        QData/*63:0*/ u_alu_top__DOT__u_alu_mul__DOT__multi_ss;
+        QData/*63:0*/ u_alu_top__DOT__u_alu_mul__DOT__multi_su;
+        QData/*63:0*/ u_alu_top__DOT__u_alu_mul__DOT__multi_uu;
+    };
+
+    // INTERNAL VARIABLES
+    Vtop__Syms* vlSymsp;
+    const char* vlNamep;
+
+    // CONSTRUCTORS
+    Vtop_fu_top();
+    ~Vtop_fu_top();
+    void ctor(Vtop__Syms* symsp, const char* namep);
+    void dtor();
+    VL_UNCOPYABLE(Vtop_fu_top);
+
+    // INTERNAL METHODS
+    void __Vconfigure(bool first);
+};
+
+
+#endif  // guard
