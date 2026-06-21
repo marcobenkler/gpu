@@ -1,8 +1,0 @@
-<testsuites name="results">
-  <testsuite name="all" package="all">
-    <property name="random_seed" value="1782067650" />
-    <testcase name="smoke_test" classname="smoke_test" file="/Users/marcobenkler/Dev/Verilog/GPU/verify/tb/smoke_test.py" lineno="11" time="0.0011751651763916016" sim_time_ns="290.0" ratio_time="246773.8202475147">
-      <failure error_type="AssertionError" error_msg="x3 expected 15, got 00000000000000000000000000000000" />
-    </testcase>
-  </testsuite>
-</testsuites>
