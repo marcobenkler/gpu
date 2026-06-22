@@ -1,42 +1,11 @@
 import cocotb
-import numpy as np
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, ClockCycles
-
-WARP_CNT = 4
-LANE_CNT = 4
-REG_CNT  = 32
+from gpu_config import WARP_CNT, LANE_CNT, REG_CNT
+from cocotb_utils.cocotb_wrapper_classes import WarpCtx, WarpEntry
+from cocotb_utils.cocotb_instr_vec_gen import add, addi
 
 warp_num = 0
-
-def add(rd, rs1, rs2):
-    rs1 &= 0x1F
-    rs2 &= 0x1F
-    rd  &= 0x1F
-    funct3 = 0x0
-    funct7 = 0x0
-    return (funct7 << 25) | (rs2 << 20) | (rs1 << 15) | (funct3 << 12) | (rd << 7) | 0x33
-
-def addi(rd, rs1, imm):
-    rs1 &= 0x1F
-    rd  &= 0x1F
-    imm &= 0xFFF
-    funct3 = 0x0
-    return (imm << 20) | (rs1 << 15) | (funct3 << 12) | (rd << 7) | 0x13
-
-class WarpCtx:
-    def __init__(self, val):
-        v = int(val)
-        self.pc   = (v >> LANE_CNT) & 0xFFFFFFFF
-        self.amsk = v & ((1 << LANE_CNT) - 1)
-
-class WarpEntry:
-    def __init__(self, val):
-        v = int(val)
-        rank_bits       = int(np.log2(WARP_CNT))
-        self.state      = (v >> (rank_bits + 32)) & 0x7
-        self.age_rank   = (v >> 32) & ((1 << rank_bits) - 1)
-        self.scoreboard = v & 0xFFFFFFFF
 
 def add_simple():
     return [

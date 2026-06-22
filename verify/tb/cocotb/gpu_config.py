@@ -1,0 +1,3 @@
+WARP_CNT = 4
+LANE_CNT = 4
+REG_CNT  = 32

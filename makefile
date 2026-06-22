@@ -40,7 +40,7 @@ cocotb: clean_dump
 		SIM_BUILD=sim_build \
 		EXTRA_ARGS="--trace-fst --trace-structs --trace-underscore --trace-max-array 512 --trace-max-width 0 " \
 		PLUSARGS="--trace" \
-		PYTHONPATH="$(PWD)/verify/tb"
+		PYTHONPATH="$(PWD)/verify/tb/cocotb"
 
 vsim: 
 ifndef TEST
