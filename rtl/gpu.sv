@@ -19,7 +19,6 @@ module gpu
     logic                        wspawn;
 
     wsched_entry_t      wsched_entry [0:warp_cnt-1];
-    logic [reg_cnt-1:0] scoreboard   [0:warp_cnt-1]; //written to in fetch cleared in wb
 
     //FETCH
     logic [31:0] imm_res;
@@ -79,15 +78,17 @@ module gpu
         .clk(clk),
         .rst_n(rst_n),
         .warp_bar(warp_bar),
-        .scoreboard(scoreboard),
         .fetch_warp_id(warp_id),
         .rs1(instr[19:15]),
         .rs2(instr[24:20]),
+        .id_rd(instr[11:7]),
         .mem_stl(1'b0),
         .mem_warp_id(warp_id),
         .warp_ctx(ctx_tbl),
         .warp_activate_cnt(rdata1[0]),
         .wspawn(wspawn),
+        .wb_warp_id(warp_id),
+        .wb_rd(instr[11:7]),
         .wsched_entry(wsched_entry) //output
     );
 

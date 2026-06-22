@@ -17,8 +17,9 @@ package warp_pkg;
     } warp_ctx_t;
 
     typedef struct packed {
-        warp_state_e               state;
+        warp_state_e                 state;
         logic [$clog2(warp_cnt)-1:0] age_rank;
+        logic [31:0]                 scoreboard;
     } wsched_entry_t;
 
 endpackage

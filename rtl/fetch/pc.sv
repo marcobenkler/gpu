@@ -11,7 +11,7 @@ module pc
     output logic [31:0] pc_def //for JAL
 );
 
-    assign pc_def = pc_cur + 4;
+    assign pc_def = pc_cur + 1;
     always_comb begin
         case (pc_src)
             PC_4:    pc_nxt = pc_def;
